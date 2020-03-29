@@ -1,9 +1,14 @@
 import { until as asyncUntil } from 'async-agent';
-import { isBoolean, isString } from 'type-enforcer';
+import { Schema } from 'hord';
+import { Enum, isBoolean, isString } from 'type-enforcer';
 import { Point } from 'type-enforcer-math';
+import Arc from './commands/Arc.js';
 import Close from './commands/Close.js';
+import Cubic from './commands/Cubic.js';
 import Line from './commands/Line.js';
 import Move from './commands/Move.js';
+import Quadratic from './commands/Quadratic.js';
+import origin from './utility/origin.js';
 
 const commands = {
 	m: (path, data) => path.move(data),
@@ -14,6 +19,16 @@ const commands = {
 	H: (path, data, currentPoint) => path.line(data, currentPoint.y, true),
 	v: (path, data) => path.line(0, data),
 	V: (path, data, currentPoint) => path.line(currentPoint.x, data, true),
+	c: (path, data) => path.cubic(data),
+	C: (path, data) => path.cubic(data, true),
+	s: (path, data) => path.cubic(data),
+	S: (path, data) => path.cubic(data, true),
+	q: (path, data) => path.quadratic(data),
+	Q: (path, data) => path.quadratic(data, true),
+	t: (path, data) => path.quadratic(data),
+	T: (path, data) => path.quadratic(data, true),
+	a: (path, data) => path.arc(data),
+	A: (path, data) => path.arc(data, true),
 	z: (path) => path.close(),
 	Z: (path) => path.close(true)
 };
@@ -45,6 +60,32 @@ const coordinatesTo = {
 	}
 };
 
+const exportSettingsSchema = new Schema({
+	coordinates: {
+		type: Enum,
+		enum: new Enum({
+			initial: 'initial',
+			absolute: 'absolute',
+			relative: 'relative',
+			auto: 'auto'
+		})
+	},
+	compress: Boolean,
+	combine: Boolean,
+	fractionDigits: {
+		type: 'integer',
+		min: 0
+	},
+	scale: [Point, Object, Array],
+	translate: [Point, Object, Array],
+	maxCharsPerLine: {
+		type: 'integer',
+		min: 1
+	},
+	commandsOnNewLines: Boolean,
+	async: Boolean
+});
+
 const syncUntil = (callback) => new Promise((resolve) => {
 	let result = false;
 
@@ -59,6 +100,8 @@ const importPath = Symbol();
 const add = Symbol();
 
 const PATH = Symbol();
+const END_OF_PATH = Symbol();
+const SUB_PATH_START = Symbol();
 
 /**
  * @typedef integer
@@ -66,13 +109,17 @@ const PATH = Symbol();
  */
 
 /**
+ * Parse, build, and optimize SVG path data.
+ *
  * @class Path
  *
- * @arg {string} [path]
+ * @arg {string} [path] - Optional path data to parse.
  */
 export default class Path {
 	constructor(path) {
 		this[PATH] = [];
+		this[END_OF_PATH] = origin;
+		this[SUB_PATH_START] = origin;
 
 		if (isString(path)) {
 			this[importPath](path);
@@ -80,23 +127,13 @@ export default class Path {
 	}
 
 	[importPath](string) {
-		const path = this[PATH];
-		const end = string.length;
-		let currentPoint = new Point();
-		let subPathStart = new Point();
-		let start = 0;
-
 		string = string.trim();
 
-		for (let index = 1; index <= end; index++) {
-			if (commands[string.charAt(index)] !== undefined || index === end) {
-				commands[string.charAt(start)](this, string.slice(start + 1, index), currentPoint);
+		let start = 0;
 
-				currentPoint = path[path.length - 1].position(currentPoint, subPathStart);
-
-				if (index === 0 || path[path.length - 1] instanceof Move) {
-					subPathStart = currentPoint;
-				}
+		for (let index = 1; index <= string.length; index++) {
+			if (commands[string.charAt(index)] !== undefined || index === string.length) {
+				commands[string.charAt(start)](this, string.slice(start + 1, index), this[END_OF_PATH]);
 
 				start = index;
 			}
@@ -104,13 +141,20 @@ export default class Path {
 	}
 
 	[add](Command, args) {
-		if (args !== undefined && isBoolean(args[args.length - 1])) {
-			const isAbsolute = args.pop();
+		const previous = this[PATH][this[PATH].length - 1];
+		let isAbsolute = false;
 
-			this[PATH].push(new Command(args).isAbsolute(isAbsolute));
+		if (args !== undefined && isBoolean(args[args.length - 1])) {
+			isAbsolute = args.pop();
 		}
-		else {
-			this[PATH].push(new Command(args));
+
+		const command = new Command(args, previous, this[END_OF_PATH], isAbsolute);
+
+		this[PATH].push(command);
+		this[END_OF_PATH] = command.position(this[END_OF_PATH], this[SUB_PATH_START]);
+
+		if (command instanceof Move) {
+			this[SUB_PATH_START] = this[END_OF_PATH];
 		}
 
 		return this;
@@ -124,8 +168,42 @@ export default class Path {
 		return this[add](Line, args);
 	}
 
+	cubic(...args) {
+		return this[add](Cubic, args);
+	}
+
+	quadratic(...args) {
+		return this[add](Quadratic, args);
+	}
+
+	arc(...args) {
+		return this[add](Arc, args);
+	}
+
 	close(...args) {
 		return this[add](Close, args);
+	}
+
+	/**
+	 * Update command values at a specific index.
+	 *
+	 * @param {integer} index - Index of the command to update.
+	 * @param {string|number[]} values - New values for the command at this index.
+	 */
+	update(index, values) {
+		const command = this[PATH][index];
+
+		if (command !== undefined) {
+			command.set(values);
+		}
+	}
+
+	transform(settings, start = 0, end = Infinity) {
+		end = Math.min(end, this[PATH].length - 1);
+
+		for (let index = start; index < end; index++) {
+			// TODO: transform (Mutate)
+		}
 	}
 
 	/**
@@ -151,12 +229,18 @@ export default class Path {
 		const until = settings.async === true ? asyncUntil : syncUntil;
 		let output = '';
 
+		exportSettingsSchema
+			.validate(settings)
+			.forEach((error) => {
+				throw new TypeError(error.error, error);
+			});
+
 		settings = {
 			coordinates: 'initial',
 			combine: true,
 			fractionDigits: 3,
 			...settings,
-			currentPoint: new Point(),
+			currentPoint: origin,
 			subPathStart: 0
 		};
 
@@ -173,14 +257,16 @@ export default class Path {
 
 				if (
 					settings.compress !== true &&
-					commandResult.length !== 0 &&
-					output.length !== 0 &&
-					output[output.length - 1] !== ' '
+					commandResult !== '' &&
+					output !== '' &&
+					output.charAt(output.length - 1) !== ' '
 				) {
 					output += ' ';
 				}
 
 				output += commandResult;
+
+				settings.previous = command;
 			}
 
 			return nextCommands.length === 0;

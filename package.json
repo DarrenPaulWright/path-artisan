@@ -81,6 +81,7 @@
 	"homepage": "https://github.com/DarrenPaulWright/path-artisan#readme",
 	"dependencies": {
 		"async-agent": "^0.5.2",
+		"hord": "^0.7.0",
 		"type-enforcer": "^1.1.1",
 		"type-enforcer-math": "^1.2.0"
 	},

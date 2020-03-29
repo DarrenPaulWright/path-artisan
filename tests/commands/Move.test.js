@@ -36,7 +36,7 @@ describe('Move', () => {
 		});
 
 		it('should convert from absolute', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
+			const move = new Move(['1,2'], null, null, true);
 			const nextCommands = [];
 
 			assert.equal(move.export(settings, nextCommands), 'M 1,2');
@@ -55,7 +55,7 @@ describe('Move', () => {
 
 		it('should merge relative, absolute', () => {
 			const move = new Move(['1,2']);
-			const nextCommands = [new Move(['3, 4']).isAbsolute(true)];
+			const nextCommands = [new Move(['3, 4'], null, null, true)];
 
 			assert.equal(move.export(settings, nextCommands), 'M 3,4');
 			assert.equal(settings.currentPoint, new Point(3, 4));
@@ -75,7 +75,7 @@ describe('Move', () => {
 			const move = new Move(['1,2']);
 			const nextCommands = [
 				new Move(['3, 4']),
-				new Move(['3, 4']).isAbsolute(true)
+				new Move(['3, 4'], null, null, true)
 			];
 
 			assert.equal(move.export(settings, nextCommands), 'M 6,8');
@@ -96,8 +96,8 @@ describe('Move', () => {
 		});
 
 		it('should merge absolute, absolute', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
-			const nextCommands = [new Move(['3, 4']).isAbsolute(true)];
+			const move = new Move(['1,2'], null, null, true);
+			const nextCommands = [new Move(['3, 4'], null, null, true)];
 
 			assert.equal(move.export(settings, nextCommands), 'M 3,4');
 			assert.equal(settings.currentPoint, new Point(3, 4));
@@ -105,7 +105,7 @@ describe('Move', () => {
 		});
 
 		it('should merge absolute, relative', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
+			const move = new Move(['1,2'], null, null, true);
 			const nextCommands = [new Move(['3,4'])];
 
 			assert.equal(move.export(settings, nextCommands), 'M 4,6');
@@ -114,10 +114,10 @@ describe('Move', () => {
 		});
 
 		it('should merge absolute, absolute, relative', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
+			const move = new Move(['1,2'], null, null, true);
 			const nextCommands = [
 				new Move(['3, 4']),
-				new Move(['3, 4']).isAbsolute(true)
+				new Move(['3, 4'], null, null, true)
 			];
 
 			assert.equal(move.export(settings, nextCommands), 'M 6,8');
@@ -126,7 +126,7 @@ describe('Move', () => {
 		});
 
 		it('should merge absolute, relative, relative', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
+			const move = new Move(['1,2'], null, null, true);
 			const nextCommands = [
 				{},
 				new Move(['3,4']),
@@ -150,7 +150,7 @@ describe('Move', () => {
 		});
 
 		it('should convert from absolute', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
+			const move = new Move(['1,2'], null, null, true);
 			const nextCommands = [];
 
 			assert.equal(move.export(settings, nextCommands), 'm -9,-8');
@@ -169,7 +169,7 @@ describe('Move', () => {
 
 		it('should merge relative, absolute', () => {
 			const move = new Move(['1,2']);
-			const nextCommands = [new Move(['3, 4']).isAbsolute(true)];
+			const nextCommands = [new Move(['3, 4'], null, null, true)];
 
 			assert.equal(move.export(settings, nextCommands), 'm -7,-6');
 			assert.equal(settings.currentPoint, new Point(3, 4));
@@ -189,7 +189,7 @@ describe('Move', () => {
 			const move = new Move(['1,2']);
 			const nextCommands = [
 				new Move(['3, 4']),
-				new Move(['3, 4']).isAbsolute(true)
+				new Move(['3, 4'], null, null, true)
 			];
 
 			assert.equal(move.export(settings, nextCommands), 'm -4,-2');
@@ -210,8 +210,8 @@ describe('Move', () => {
 		});
 
 		it('should merge absolute, absolute', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
-			const nextCommands = [new Move(['3, 4']).isAbsolute(true)];
+			const move = new Move(['1,2'], null, null, true);
+			const nextCommands = [new Move(['3, 4'], null, null, true)];
 
 			assert.equal(move.export(settings, nextCommands), 'm -7,-6');
 			assert.equal(settings.currentPoint, new Point(3, 4));
@@ -219,7 +219,7 @@ describe('Move', () => {
 		});
 
 		it('should merge absolute, relative', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
+			const move = new Move(['1,2'], null, null, true);
 			const nextCommands = [new Move(['3,4'])];
 
 			assert.equal(move.export(settings, nextCommands), 'm -6,-4');
@@ -228,10 +228,10 @@ describe('Move', () => {
 		});
 
 		it('should merge absolute, absolute, relative', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
+			const move = new Move(['1,2'], null, null, true);
 			const nextCommands = [
 				new Move(['3, 4']),
-				new Move(['3, 4']).isAbsolute(true)
+				new Move(['3, 4'], null, null, true)
 			];
 
 			assert.equal(move.export(settings, nextCommands), 'm -4,-2');
@@ -240,7 +240,7 @@ describe('Move', () => {
 		});
 
 		it('should merge absolute, relative, relative', () => {
-			const move = new Move(['1,2']).isAbsolute(true);
+			const move = new Move(['1,2'], null, null, true);
 			const nextCommands = [
 				new Move(['3,4']),
 				new Move(['3,4'])

@@ -6,10 +6,10 @@ const isWhiteSpace = (char) => !CHARS.includes(char);
 const ABSOLUTE = Symbol();
 
 export default class Command {
-	constructor(args) {
-		this[ABSOLUTE] = false;
+	constructor(args, previous, currentPoint, isAbsolute) {
+		this[ABSOLUTE] = isAbsolute;
 
-		this.set(args);
+		this.set(args, previous, currentPoint);
 	}
 
 	static parseArgs(args) {
@@ -62,12 +62,25 @@ export default class Command {
 		return output;
 	}
 
-	// TODO: account for rounding
-	static isInline(a, b, c) {
-		const angle1 = new Vector(a, b).angle();
-		const angle2 = new Vector(b, c).angle();
+	static isInline(...args) {
+		const diff = new Vector(null, args[0]);
+		let angle = null;
 
-		return angle1 === angle2;
+		for (let index = 1; index < args.length; index++) {
+			if (!diff.end().isSame(args[index])) {
+				diff.invert();
+				diff.end(args[index]);
+
+				if (angle === null) {
+					angle = diff.angle();
+				}
+				else if (diff.angle() !== angle) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	static label(absoluteLabel, relativeLabel, settings) {
@@ -109,11 +122,19 @@ export default class Command {
 			point.y;
 	}
 
+	static numberToString(number, settings) {
+		return ((settings.compress === true && number < 0) ? '' : ' ') + number;
+	}
+
 	set() {
 	}
 
 	convertPoint(point, currentPoint) {
-		return this.isAbsolute() ? point : currentPoint.add(point);
+		if (this[ABSOLUTE] === true || currentPoint === undefined) {
+			return point;
+		}
+
+		return currentPoint.add(point);
 	}
 
 	isAbsolute(isAbsolute) {
@@ -141,10 +162,26 @@ export default class Command {
 
 	postCombine(settings) {
 		if (settings.offset !== undefined) {
-			if (this.isAbsolute() || settings.toAbsolute) {
+			if (this[ABSOLUTE] === true || settings.toAbsolute) {
 				settings.currentPoint = settings.currentPoint.subtract(settings.offset);
 				settings.offset = undefined;
 			}
 		}
+	}
+
+	reflectPreviousControlPoint(previous, currentPoint) {
+		if (previous instanceof this.constructor) {
+			if (this[ABSOLUTE] === true) {
+				return currentPoint.add(previous.controlPoint(currentPoint));
+			}
+
+			return previous.controlPoint();
+		}
+
+		if (this[ABSOLUTE] === true) {
+			return currentPoint;
+		}
+
+		return new Point();
 	}
 }

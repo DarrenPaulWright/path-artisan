@@ -173,4 +173,32 @@ describe('Command', () => {
 			assert.equal(point, output);
 		});
 	});
+
+	describe('.isInline', () => {
+		it('should return true for three points in a line', () => {
+			assert.equal(Command.isInline(
+				new Point(1, 2),
+				new Point(2, 3),
+				new Point(3, 4)
+			), true);
+		});
+
+		it('should return true for four points in a line', () => {
+			assert.equal(Command.isInline(
+				new Point(1, 2),
+				new Point(2, 3),
+				new Point(3, 4),
+				new Point(4, 5)
+			), true);
+		});
+
+		it('should return true for three points in a line and a duplicate', () => {
+			assert.equal(Command.isInline(
+				new Point(2, 3),
+				new Point(2, 3),
+				new Point(3, 4),
+				new Point(4, 5)
+			), true);
+		});
+	});
 });

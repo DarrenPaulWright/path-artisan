@@ -91,6 +91,27 @@ const testValues = [{
 	relative: 'm 5,6 l 15,18 z m -505,-606 l 507,608 l 10,12 z',
 	initial: 'm 5,6 L 10,12 l 10,12 z M -500,-600 L 7,8 l 10,12 z',
 	auto: 'm 5,6 l 15,18 z m -505,-606 L 7,8 l 10,12 z'
+}, {
+	note: 'Cubic shorthand',
+	input: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 s 2,2 2,0 z',
+	absolute: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 S 8,4 8,2 Z',
+	relative: 'm 2,2 c 0,2 2,2 2,0 s 2,-2 2,0 s 2,2 2,0 z',
+	initial: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 s 2,2 2,0 z',
+	auto: 'm 2,2 c 0,2 2,2 2,0 S 6,0 6,2 s 2,2 2,0 z'
+}, {
+	note: 'Quadratic shorthand',
+	input: 'm 2,2 Q 3,3 4,2 T 6,2 t 2,0 z',
+	absolute: 'M 2,2 Q 3,3 4,2 T 6,2 T 8,2 Z',
+	relative: 'm 2,2 q 1,1 2,0 t 2,0 t 2,0 z',
+	initial: 'm 2,2 Q 3,3 4,2 T 6,2 t 2,0 z',
+	auto: 'm 2,2 q 1,1 2,0 t 2,0 t 2,0 z'
+}, {
+	note: 'Arc',
+	input: 'm 2,2 A 10,10 0 0 0 8,8 a 5,5 0 0 0 12,12 z',
+	absolute: 'M 2,2 A 10,10 0 0 0 8,8 A 5,5 0 0 0 20,20 Z',
+	relative: 'm 2,2 a 10,10 0 0 0 6,6 a 5,5 0 0 0 12,12 z',
+	initial: 'm 2,2 A 10,10 0 0 0 8,8 a 5,5 0 0 0 12,12 z',
+	auto: 'm 2,2 a 10,10 0 0 0 6,6 a 5,5 0 0 0 12,12 z'
 }];
 
 describe('Path', () => {
