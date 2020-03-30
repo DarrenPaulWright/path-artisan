@@ -151,7 +151,7 @@ describe('Line', () => {
 	});
 
 	describe('toAbsolute', () => {
-		let settings;
+		let settings = {};
 
 		beforeEach(() => {
 			settings = {
@@ -266,7 +266,7 @@ describe('Line', () => {
 	});
 
 	describe('toRelative', () => {
-		let settings;
+		let settings = {};
 
 		beforeEach(() => {
 			settings = {

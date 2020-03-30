@@ -14,7 +14,7 @@ describe('Cubic', () => {
 	});
 
 	describe('shorthand', () => {
-		let settings;
+		let settings = {};
 
 		beforeEach(() => {
 			settings = {
@@ -135,7 +135,7 @@ describe('Cubic', () => {
 
 	describe('export', () => {
 		describe('toAbsolute', () => {
-			let settings;
+			let settings = {};
 
 			beforeEach(() => {
 				settings = {
@@ -160,7 +160,7 @@ describe('Cubic', () => {
 		});
 
 		describe('toRelative', () => {
-			let settings;
+			let settings = {};
 
 			beforeEach(() => {
 				settings = {

@@ -26,7 +26,7 @@ describe('Move', () => {
 	});
 
 	describe('toAbsolute', () => {
-		let settings;
+		let settings = {};
 
 		beforeEach(() => {
 			settings = {
@@ -140,7 +140,7 @@ describe('Move', () => {
 	});
 
 	describe('toRelative', () => {
-		let settings;
+		let settings = {};
 
 		beforeEach(() => {
 			settings = {

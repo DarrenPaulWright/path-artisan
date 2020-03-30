@@ -92,8 +92,6 @@ describe('Command', () => {
 		});
 	});
 
-	// TODO: test toAbsolute
-	// TODO: test offset
 	describe('.pointToString', () => {
 		const currentPoint = new Point();
 

@@ -276,14 +276,6 @@ export default class Path {
 		}
 	}
 
-	transform(settings, start = 0, end = Infinity) {
-		end = Math.min(end, this[PATH].length - 1);
-
-		for (let index = start; index < end; index++) {
-			// TODO: transform (Mutate)
-		}
-	}
-
 	/**
 	 * Export a string of the path.
 	 *

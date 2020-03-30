@@ -7,7 +7,7 @@ describe('Arc', () => {
 
 	describe('export', () => {
 		describe('toAbsolute', () => {
-			let settings;
+			let settings = {};
 
 			beforeEach(() => {
 				settings = {
@@ -32,7 +32,7 @@ describe('Arc', () => {
 		});
 
 		describe('toRelative', () => {
-			let settings;
+			let settings = {};
 
 			beforeEach(() => {
 				settings = {

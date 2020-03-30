@@ -14,7 +14,7 @@ describe('Quadratic', () => {
 	});
 
 	describe('shorthand', () => {
-		let settings;
+		let settings = {};
 
 		beforeEach(() => {
 			settings = {
@@ -117,7 +117,7 @@ describe('Quadratic', () => {
 
 	describe('export', () => {
 		describe('toAbsolute', () => {
-			let settings;
+			let settings = {};
 
 			beforeEach(() => {
 				settings = {
@@ -142,7 +142,7 @@ describe('Quadratic', () => {
 		});
 
 		describe('toRelative', () => {
-			let settings;
+			let settings = {};
 
 			beforeEach(() => {
 				settings = {
