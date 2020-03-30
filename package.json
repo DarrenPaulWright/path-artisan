@@ -1,5 +1,5 @@
 {
-	"name": "path-artisan",
+	"name": "pathinator",
 	"version": "0.0.0",
 	"description": "SVG path builder and minifier",
 	"author": {
@@ -26,7 +26,7 @@
 		"update-clean": "npm run pre-clean && npm run update",
 		"update-commit": "npm run update && npm test && git add --all && git diff --staged --quiet || git commit -m \"Updating dependencies\"",
 		"update-patch": "npm run update-commit && npm version patch",
-		"docs:readme": "jsdoc2md ./index.js src/**/*.js > README.md -t node_modules/dmd-readable/overview.hbs --plugin dmd-readable/overview-plugin.js",
+		"docs:readme": "jsdoc2md src/Path.js > README.md -t node_modules/dmd-readable/docs.hbs --plugin dmd-readable",
 		"docs": "run-p docs:*"
 	},
 	"badges": {
@@ -65,7 +65,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/DarrenPaulWright/path-artisan.git"
+		"url": "git+https://github.com/DarrenPaulWright/pathinator.git"
 	},
 	"keywords": [
 		"svg",
@@ -76,9 +76,9 @@
 	],
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/DarrenPaulWright/path-artisan/issues"
+		"url": "https://github.com/DarrenPaulWright/pathinator/issues"
 	},
-	"homepage": "https://github.com/DarrenPaulWright/path-artisan#readme",
+	"homepage": "https://github.com/DarrenPaulWright/pathinator#readme",
 	"dependencies": {
 		"async-agent": "^0.5.2",
 		"hord": "^0.7.0",

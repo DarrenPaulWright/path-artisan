@@ -109,8 +109,29 @@ const SUB_PATH_START = Symbol();
  */
 
 /**
+ * @name Installation
+ * @summary
+ *
+ * ```
+ * npm install pathinator
+ * ```
+ */
+
+/**
  * Parse, build, and optimize SVG path data.
  *
+ * @example
+ * ``` javascript
+ * import { Path } from 'pathinator';
+ *
+ * const path = new Path()
+ *     .move(50, 100)
+ *     .line(100, 100)
+ *     .line(200, 200)
+ *     .close();
+ * ```
+ *
+ * @category 2
  * @class Path
  *
  * @arg {string} [path] - Optional path data to parse.
@@ -160,32 +181,89 @@ export default class Path {
 		return this;
 	}
 
+	/**
+	 * Add a [move](https://www.w3.org/TR/SVG/paths.html#PathDataMovetoCommands) command.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 *
+	 * @param {...number} args - x and y coordinates.
+	 * @returns {*}
+	 */
 	move(...args) {
 		return this[add](Move, args);
 	}
 
+	/**
+	 * Add a [line](https://www.w3.org/TR/SVG/paths.html#PathDataLinetoCommands) command.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 *
+	 * @param {...number} args - x and y coordinates.
+	 * @returns {*}
+	 */
 	line(...args) {
 		return this[add](Line, args);
 	}
 
+	/**
+	 * Add a [quadratic bezier curve](https://www.w3.org/TR/SVG/paths.html#PathDataCubicBezierCommands) command.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 *
+	 * @param {...number} args - Series of coordinates.
+	 * @returns {*}
+	 */
 	cubic(...args) {
 		return this[add](Cubic, args);
 	}
 
+	/**
+	 * Add a [quadratic bezier curve](https://www.w3.org/TR/SVG/paths.html#PathDataQuadraticBezierCommands) command.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 *
+	 * @param {...number} args - Series of coordinates.
+	 * @returns {*}
+	 */
 	quadratic(...args) {
 		return this[add](Quadratic, args);
 	}
 
+	/**
+	 * Add an [arc](https://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands) command.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 *
+	 * @param {...number} args - Series of coordinates / values.
+	 * @returns {*}
+	 */
 	arc(...args) {
 		return this[add](Arc, args);
 	}
 
+	/**
+	 * Add a [close](https://www.w3.org/TR/SVG/paths.html#PathDataClosePathCommand) command.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 *
+	 * @param {...number} args - Move to coordinates.
+	 * @returns {*}
+	 */
 	close(...args) {
 		return this[add](Close, args);
 	}
 
 	/**
 	 * Update command values at a specific index.
+	 *
+	 * @memberOf Path
+	 * @instance
 	 *
 	 * @param {integer} index - Index of the command to update.
 	 * @param {string|number[]} values - New values for the command at this index.
@@ -208,6 +286,9 @@ export default class Path {
 
 	/**
 	 * Export a string of the path.
+	 *
+	 * @memberOf Path
+	 * @instance
 	 *
 	 * @param {object} [settings] - Optional settings object.
 	 * @param {string} [settings.coordinates='initial'] - 'absolute' to convert all coordinates to absolute, 'relative' to convert all coordinates to relative, 'auto' to convert coordinates to whichever is the fewest characters, 'initial' (default) to retain the coordinates set on each command
