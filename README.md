@@ -24,6 +24,7 @@ npm install pathinator
 
 * [Path](#Path)
     * [new Path([path])](#new_Path_new)
+    * [.import(path)](#Path+import) ⇒ <code>object</code>
     * [.move(...args)](#Path+move) ⇒ <code>\*</code>
     * [.line(...args)](#Path+line) ⇒ <code>\*</code>
     * [.cubic(...args)](#Path+cubic) ⇒ <code>\*</code>
@@ -31,6 +32,7 @@ npm install pathinator
     * [.arc(...args)](#Path+arc) ⇒ <code>\*</code>
     * [.close(...args)](#Path+close) ⇒ <code>\*</code>
     * [.update(index, values)](#Path+update)
+    * [.eachPoint(callback)](#Path+eachPoint)
     * [.export([settings])](#Path+export) ⇒ <code>Promise.&lt;string&gt;</code>
 
 
@@ -54,6 +56,18 @@ const path = new Path()
     .line(200, 200)
     .close();
 ```
+
+<br><a name="Path+import"></a>
+
+### path.import(path) ⇒ <code>object</code>
+> Import a path string.
+
+**Returns**: <code>object</code> - this  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | A valid path data string or polygon string. |
+
 
 <br><a name="Path+move"></a>
 
@@ -133,6 +147,17 @@ const path = new Path()
 | values | <code>string</code>, <code>Array.&lt;number&gt;</code> | New values for the command at this index. |
 
 
+<br><a name="Path+eachPoint"></a>
+
+### path.eachPoint(callback)
+> Calls  callback for each point in the path.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| callback | <code>function</code> | Provides two arguments: the Point, and a boolean indicating if the point is a control point. |
+
+
 <br><a name="Path+export"></a>
 
 ### path.export([settings]) ⇒ <code>Promise.&lt;string&gt;</code>
@@ -150,6 +175,7 @@ const path = new Path()
 | [settings.translate] | <code>number</code>, <code>Point</code> |  | Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point |
 | [settings.maxCharsPerLine] | <code>number</code>, <code>Point</code> |  | Add newlines at logical breaks in the path to improve readability. |
 | [settings.commandsOnNewLines] | <code>number</code>, <code>Point</code> |  | Add a newline between each command. |
+| [settings.toPolygon] | <code>boolean</code> |  | Format the string for use in a polygon element. Sets coordinates to 'absolute'. |
 | [settings.async] | <code>boolean</code> | <code>false</code> | Process each command in a separate Promise. |
 
 
