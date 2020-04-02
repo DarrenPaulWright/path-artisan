@@ -47,17 +47,19 @@ export default class Cubic extends Command {
 		const point = this.convertPoint(this[DATA][2], settings.currentPoint);
 		let result = '';
 
-		if (this.isShorthand(settings, control1)) {
-			result = Cubic.label('S', 's', settings) +
-				Cubic.pointToString(control2, settings);
-		}
-		else {
-			result = Cubic.label('C', 'c', settings) +
-				Cubic.pointToString(control1, settings) +
-				Cubic.pointToString(control2, settings, true);
+		if (!settings.toPolygon) {
+			if (this.isShorthand(settings, control1)) {
+				result = Cubic.label('S', 's', settings) +
+					Cubic.pointToString(control2, settings);
+			}
+			else {
+				result = Cubic.label('C', 'c', settings) +
+					Cubic.pointToString(control1, settings) +
+					Cubic.pointToString(control2, settings, true);
+			}
 		}
 
-		result += Cubic.pointToString(point, settings, true);
+		result += Cubic.pointToString(point, settings, !settings.toPolygon);
 
 		settings.currentPoint = point;
 

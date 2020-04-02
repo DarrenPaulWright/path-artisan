@@ -84,9 +84,17 @@ export default class Command {
 	}
 
 	static label(absoluteLabel, relativeLabel, settings) {
-		return (settings.commandsOnNewLines ? '\n' : '') +
-			(settings.toAbsolute ? absoluteLabel : relativeLabel) +
-			(settings.compress === true ? '' : ' ');
+		let output = settings.commandsOnNewLines ? '\n' : '';
+
+		if (!settings.toPolygon) {
+			output += (settings.toAbsolute ? absoluteLabel : relativeLabel);
+
+			if (settings.compress !== true) {
+				output += ' ';
+			}
+		}
+
+		return output;
 	}
 
 	static transform(point, settings) {

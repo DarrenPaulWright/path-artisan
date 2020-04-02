@@ -15,15 +15,21 @@ export default class Quadratic extends Cubic {
 		const point = this.convertPoint(this[DATA][1], settings.currentPoint);
 		let result = '';
 
-		if (this.isShorthand(settings, control)) {
-			result = Quadratic.label('T', 't', settings) +
-				Quadratic.pointToString(point, settings);
+		if (!settings.toPolygon) {
+			if (this.isShorthand(settings, control)) {
+				result = Quadratic.label('T', 't', settings);
+			}
+			else {
+				result = Quadratic.label('Q', 'q', settings) +
+					Quadratic.pointToString(control, settings);
+			}
 		}
-		else {
-			result = Quadratic.label('Q', 'q', settings) +
-				Quadratic.pointToString(control, settings) +
-				Quadratic.pointToString(point, settings, true);
-		}
+
+		result += Quadratic.pointToString(
+			point,
+			settings,
+			!settings.toPolygon && !this.isShorthand(settings, control)
+		);
 
 		settings.currentPoint = point;
 

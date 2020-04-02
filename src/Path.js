@@ -83,6 +83,7 @@ const exportSettingsSchema = new Schema({
 		min: 1
 	},
 	commandsOnNewLines: Boolean,
+	toPolygon: Boolean,
 	async: Boolean
 });
 
@@ -96,7 +97,6 @@ const syncUntil = (callback) => new Promise((resolve) => {
 	resolve();
 });
 
-const importPath = Symbol();
 const add = Symbol();
 
 const PATH = Symbol();
@@ -138,27 +138,57 @@ const SUB_PATH_START = Symbol();
  */
 export default class Path {
 	constructor(path) {
+		this.import(path);
+	}
+
+	/**
+	 * Import a path string.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 *
+	 * @param {string} path - A valid path data string or polygon string.
+	 *
+	 * @returns {object} this
+	 */
+	import(path) {
 		this[PATH] = [];
 		this[END_OF_PATH] = origin;
 		this[SUB_PATH_START] = origin;
 
 		if (isString(path)) {
-			this[importPath](path);
-		}
-	}
+			path = path.trim();
 
-	[importPath](string) {
-		string = string.trim();
+			const isPolygon = commands[path.charAt(0)] === undefined;
+			let start = 0;
 
-		let start = 0;
+			if (isPolygon) {
+				start = -1;
+				let command = 'move';
 
-		for (let index = 1; index <= string.length; index++) {
-			if (commands[string.charAt(index)] !== undefined || index === string.length) {
-				commands[string.charAt(start)](this, string.slice(start + 1, index), this[END_OF_PATH]);
+				for (let index = 0; index <= path.length; index++) {
+					if (path.charAt(index) === ' ' || index === path.length) {
+						this[command](path.slice(start + 1, index), true);
 
-				start = index;
+						start = index;
+						command = 'line';
+					}
+				}
+
+				this.close(true);
+			}
+			else {
+				for (let index = 1; index <= path.length; index++) {
+					if (commands[path.charAt(index)] !== undefined || index === path.length) {
+						commands[path.charAt(start)](this, path.slice(start + 1, index), this[END_OF_PATH]);
+
+						start = index;
+					}
+				}
 			}
 		}
+
+		return this;
 	}
 
 	[add](Command, args) {
@@ -292,6 +322,7 @@ export default class Path {
 	 *
 	 * @param {number|Point} [settings.maxCharsPerLine] - Add newlines at logical breaks in the path to improve readability.
 	 * @param {number|Point} [settings.commandsOnNewLines] - Add a newline between each command.
+	 * @param {boolean} [settings.toPolygon] - Format the string for use in a polygon element. Sets coordinates to 'absolute'.
 	 * @param {boolean} [settings.async=false] - Process each command in a separate Promise.
 	 *
 	 * @returns {Promise<string>}
@@ -312,10 +343,15 @@ export default class Path {
 			coordinates: 'initial',
 			combine: true,
 			fractionDigits: 3,
+			toPolygon: false,
 			...settings,
 			currentPoint: origin,
 			subPathStart: 0
 		};
+
+		if (settings.toPolygon) {
+			settings.coordinates = 'absolute';
+		}
 
 		return until(() => {
 			if (nextCommands.length !== 0) {

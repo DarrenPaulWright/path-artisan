@@ -124,6 +124,17 @@ describe('Path', () => {
 		});
 	});
 
+	describe('import', () => {
+		it('should import a polygon path', () => {
+			return new Path()
+				.import('50,50 100,100 200,150')
+				.export()
+				.then((string) => {
+					assert.is(string, 'M 50,50 L 100,100 L 200,150 Z');
+				});
+		});
+	});
+
 	describe('add', () => {
 		it('should add a relative Move', () => {
 			return new Path()
@@ -263,6 +274,27 @@ describe('Path', () => {
 				})
 				.then((path) => {
 					assert.is(path, 'm 5,6 \nL 10,12 \nl 10,12 \nz \nM -500,-600 \nL 7,8 \nl 10,12 \nz');
+				});
+		});
+
+		it('should export a polygon styled string if toPolygon is true', () => {
+			return new Path('50,50 100,100 200,150')
+				.export({
+					toPolygon: true
+				})
+				.then((path) => {
+					assert.is(path, '50,50 100,100 200,150');
+				});
+		});
+
+		it('should convert curves to a polygon if toPolygon is true', () => {
+			return new Path('m 2,2 C 2,4 4,4 4,2 Q 3,3 6,2 A 10,10 0 0 0 8,8')
+				.export({
+					toPolygon: true,
+					compress: false
+				})
+				.then((path) => {
+					assert.is(path, '2,2 4,2 6,2 8,8');
 				});
 		});
 	});

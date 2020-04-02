@@ -26,15 +26,18 @@ export default class Arc extends Command {
 		const point = this.convertPoint(this[DATA][4], settings.currentPoint);
 		let result = '';
 
-		result = Arc.label('A', 'a', settings) +
-			Arc.pointToString(radius, {
-				...settings,
-				currentPoint: origin
-			}) +
-			Arc.numberToString(this[DATA][1], settings) +
-			Arc.numberToString(this[DATA][2], settings) +
-			Arc.numberToString(this[DATA][3], settings) +
-			Arc.pointToString(point, settings, true);
+		if (!settings.toPolygon) {
+			result = Arc.label('A', 'a', settings) +
+				Arc.pointToString(radius, {
+					...settings,
+					currentPoint: origin
+				}) +
+				Arc.numberToString(this[DATA][1], settings) +
+				Arc.numberToString(this[DATA][2], settings) +
+				Arc.numberToString(this[DATA][3], settings);
+		}
+
+		result += Arc.pointToString(point, settings, !settings.toPolygon);
 
 		settings.currentPoint = point;
 
