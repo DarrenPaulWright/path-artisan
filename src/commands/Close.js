@@ -5,6 +5,10 @@ export default class Close extends Command {
 		return subPathStart;
 	}
 
+	eachPoint(settings) {
+		settings.currentPoint = settings.subPathStart;
+	}
+
 	export(settings) {
 		settings.currentPoint = settings.subPathStart;
 

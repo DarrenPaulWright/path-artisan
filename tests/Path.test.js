@@ -175,6 +175,52 @@ describe('Path', () => {
 		});
 	});
 
+	describe('eachPoint', () => {
+		it('should call a callback for every point in a path', () => {
+			let total = 0;
+			let count = 0;
+
+			new Path('m 1,1 L 4,4 L 50,50 zM 2,2 C 2,4 4,4 4,2 Q 3,3 6,2 A 10,10 0 0 0 8,8 z')
+				.eachPoint((point, isControlPoint) => { // eslint-disable-line complexity
+					if (point.isSame([1, 1]) && isControlPoint === false) {
+						count++;
+					}
+					else if (point.isSame([4, 4]) && isControlPoint === false) {
+						count++;
+					}
+					else if (point.isSame([50, 50]) && isControlPoint === false) {
+						count++;
+					}
+					else if (point.isSame([2, 2]) && isControlPoint === false) {
+						count++;
+					}
+					else if (point.isSame([2, 4]) && isControlPoint === true) {
+						count++;
+					}
+					else if (point.isSame([4, 4]) && isControlPoint === true) {
+						count++;
+					}
+					else if (point.isSame([4, 2]) && isControlPoint === false) {
+						count++;
+					}
+					else if (point.isSame([3, 3]) && isControlPoint === true) {
+						count++;
+					}
+					else if (point.isSame([6, 2]) && isControlPoint === false) {
+						count++;
+					}
+					else if (point.isSame([8, 8]) && isControlPoint === false) {
+						count++;
+					}
+
+					total++;
+				});
+
+			assert.is(total, 10);
+			assert.is(count, 10);
+		});
+	});
+
 	describe('export', () => {
 		testValues
 			.forEach((data) => {

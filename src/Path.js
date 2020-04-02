@@ -307,6 +307,23 @@ export default class Path {
 	}
 
 	/**
+	 * Calls  callback for each point in the path.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 *
+	 * @param {Function} callback - Provides two arguments: the Point, and a boolean indicating if the point is a control point.
+	 */
+	eachPoint(callback) {
+		this[PATH].forEach((command) => {
+			command.eachPoint({
+				currentPoint: origin,
+				subPathStart: origin
+			}, callback);
+		});
+	}
+
+	/**
 	 * Export a string of the path.
 	 *
 	 * @memberOf Path
