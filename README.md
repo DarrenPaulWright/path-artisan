@@ -34,6 +34,7 @@ npm install pathinator
     * [.close(...args)](#Path+close) ⇒ <code>object</code>
     * [.update(index, values)](#Path+update) ⇒ <code>object</code>
     * [.eachPoint(callback)](#Path+eachPoint) ⇒ <code>object</code>
+    * [.transform([settings])](#Path+transform) ⇒ <code>object</code>
     * [.export([settings])](#Path+export) ⇒ <code>Promise.&lt;string&gt;</code>
 
 
@@ -180,6 +181,22 @@ const path = new Path()
 | Param | Type | Description |
 | --- | --- | --- |
 | callback | <code>function</code> | Provides three arguments: the Point, a boolean indicating if the point is a control point, and the command index. |
+
+
+<br><a name="Path+transform"></a>
+
+### path.transform([settings]) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
+> Transform all commands in path.
+
+**Returns**: <code>object</code> - this  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [settings] | <code>object</code> |  | Optional settings object. |
+| [settings.fractionDigits] | <code>integer</code> | <code>3</code> | Round all numbers in path to a specified number of fraction digits. |
+| [settings.scale] | <code>number</code>, <code>Point</code> |  | Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point |
+| [settings.translate] | <code>number</code>, <code>Point</code> |  | Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point |
 
 
 <br><a name="Path+export"></a>
