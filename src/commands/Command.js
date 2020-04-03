@@ -137,6 +137,9 @@ export default class Command {
 	set() {
 	}
 
+	transform() {
+	}
+
 	convertPoint(point, currentPoint) {
 		if (this[ABSOLUTE] === true || currentPoint === undefined) {
 			return point;

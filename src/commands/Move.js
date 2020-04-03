@@ -11,6 +11,10 @@ export default class Move extends Command {
 		return this.convertPoint(this[POINT], currentPoint);
 	}
 
+	transform(settings) {
+		this[POINT] = Move.transform(this[POINT], settings);
+	}
+
 	export(settings, nextCommands) {
 		const point = this.position(settings.currentPoint);
 

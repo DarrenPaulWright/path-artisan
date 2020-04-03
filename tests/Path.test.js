@@ -1,5 +1,6 @@
 import displayValue from 'display-value';
 import { assert } from 'type-enforcer';
+import { Point } from 'type-enforcer-math';
 import { Path } from '../index.js';
 
 const testValues = [{
@@ -218,6 +219,76 @@ describe('Path', () => {
 
 			assert.is(total, 10);
 			assert.is(count, 10);
+		});
+	});
+
+	describe('transform', () => {
+		const transformSettings = {
+			translate: new Point(10, 10),
+			scale: new Point(2, 2),
+			fractionDigits: 1
+		};
+		const exportSettings = {
+			combine: false
+		};
+
+		it('should transform a move', () => {
+			return new Path('M 2.47,2.47 m 1.123,1.123 z')
+				.transform(transformSettings)
+				.export(exportSettings)
+				.then((result) => {
+					assert.is(result, 'M 24.9,24.9 m 22.2,22.2 z');
+				});
+		});
+
+		it('should transform a line', () => {
+			return new Path('m 1.123,1.123 L 4.123,4.123 l 5.72,5.72 z')
+				.transform(transformSettings)
+				.export(exportSettings)
+				.then((result) => {
+					assert.is(result, 'm 22.2,22.2 L 28.2,28.2 l 31.4,31.4 z');
+				});
+		});
+
+		it('should transform a cubic', () => {
+			const path = 'm 1.123,1.123 C 2.123,4.123 4.123,4.123 4.123,2.123 c 10.23,20.45 20.45,20.45 20.45,10.23 z';
+
+			return new Path(path)
+				.transform(transformSettings)
+				.export(exportSettings)
+				.then((result) => {
+					assert.is(result, 'm 22.2,22.2 C 24.2,28.2 28.2,28.2 28.2,24.2 c 40.5,60.9 60.9,60.9 60.9,40.5 z');
+				});
+		});
+
+		it('should transform a quadratic', () => {
+			return new Path('m 1.123,1.123 Q 4.123,4.123 4.123,2.123 q 20.45,20.45 20.45,10.23 z')
+				.transform(transformSettings)
+				.export(exportSettings)
+				.then((result) => {
+					assert.is(result, 'm 22.2,22.2 Q 28.2,28.2 28.2,24.2 q 60.9,60.9 60.9,40.5 z');
+				});
+		});
+
+		it('should transform an arc', () => {
+			return new Path('m 1.123,1.123 A 4.123,4.123 1 0 0 4.123,2.123 a 20.45,20.45 0 1 1 20.45,10.23 z')
+				.transform(transformSettings)
+				.export(exportSettings)
+				.then((result) => {
+					assert.is(result, 'm 22.2,22.2 A 8.2,8.2 1 0 0 28.2,24.2 a 40.9,40.9 0 1 1 60.9,40.5 z');
+				});
+		});
+
+		it('should transform all the things', () => {
+			return new Path('m 1,1 L 4,4 L 50,50 zM 2,2 C 2,4 4,4 4,2 Q 3,3 6,2 A 10,10 0 0 0 8,8 z')
+				.transform(transformSettings)
+				.export(exportSettings)
+				.then((result) => {
+					assert.is(
+						result,
+						'm 22,22 L 28,28 L 120,120 z M 24,24 C 24,28 28,28 28,24 Q 26,26 32,24 A 20,20 0 0 0 36,36 z'
+					);
+				});
 		});
 	});
 

@@ -51,6 +51,12 @@ export default class Cubic extends Command {
 		settings.currentPoint = point;
 	}
 
+	transform(settings) {
+		this[DATA] = this[DATA].map((point) => {
+			return Cubic.transform(point, settings);
+		});
+	}
+
 	export(settings) {
 		const control1 = this.convertPoint(this[DATA][0], settings.currentPoint);
 		const control2 = this.convertPoint(this[DATA][1], settings.currentPoint);

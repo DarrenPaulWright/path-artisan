@@ -21,6 +21,15 @@ export default class Arc extends Command {
 		return this.convertPoint(this[DATA][4], currentPoint);
 	}
 
+	transform(settings) {
+		this[DATA][0] = Arc.transform(this[DATA][0], {
+			scale: settings.scale,
+			fractionDigits: settings.fractionDigits,
+			toAbsolute: true
+		});
+		this[DATA][4] = Arc.transform(this[DATA][4], settings);
+	}
+
 	export(settings) {
 		const radius = this[DATA][0];
 		const point = this.convertPoint(this[DATA][4], settings.currentPoint);

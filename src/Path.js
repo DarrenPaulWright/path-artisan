@@ -347,6 +347,33 @@ export default class Path {
 	}
 
 	/**
+	 * Transform all commands in path.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 * @chainable
+	 *
+	 * @param {object} [settings] - Optional settings object.
+	 * @param {integer} [settings.fractionDigits=3] - Round all numbers in path to a specified number of fraction digits.
+	 * @param {number|Point} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point
+	 * @param {number|Point} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point
+	 *
+	 * @returns {object} this
+	 */
+	transform(settings) {
+		settings = {
+			...settings,
+			toAbsolute: true
+		};
+
+		this[PATH].forEach((command) => {
+			command.transform(settings);
+		});
+
+		return this;
+	}
+
+	/**
 	 * Export a string of the path.
 	 *
 	 * @memberOf Path

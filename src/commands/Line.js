@@ -11,6 +11,10 @@ export default class Line extends Command {
 		return this.convertPoint(this[POINT], currentPoint);
 	}
 
+	transform(settings) {
+		this[POINT] = Line.transform(this[POINT], settings);
+	}
+
 	export(settings, nextCommands) {
 		const point = this.position(settings.currentPoint);
 
