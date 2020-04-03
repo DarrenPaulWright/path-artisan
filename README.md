@@ -155,7 +155,7 @@ const path = new Path()
 
 | Param | Type | Description |
 | --- | --- | --- |
-| callback | <code>function</code> | Provides two arguments: the Point, and a boolean indicating if the point is a control point. |
+| callback | <code>function</code> | Provides three arguments: the Point, a boolean indicating if the point is a control point, and the command index. |
 
 
 <br><a name="Path+export"></a>
