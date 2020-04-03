@@ -312,14 +312,14 @@ export default class Path {
 	 * @memberOf Path
 	 * @instance
 	 *
-	 * @param {Function} callback - Provides two arguments: the Point, and a boolean indicating if the point is a control point.
+	 * @param {Function} callback - Provides three arguments: the Point, a boolean indicating if the point is a control point, and the command index.
 	 */
 	eachPoint(callback) {
-		this[PATH].forEach((command) => {
+		this[PATH].forEach((command, index) => {
 			command.eachPoint({
 				currentPoint: origin,
 				subPathStart: origin
-			}, callback);
+			}, callback, index);
 		});
 	}
 

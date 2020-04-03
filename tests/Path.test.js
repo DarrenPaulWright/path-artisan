@@ -181,35 +181,35 @@ describe('Path', () => {
 			let count = 0;
 
 			new Path('m 1,1 L 4,4 L 50,50 zM 2,2 C 2,4 4,4 4,2 Q 3,3 6,2 A 10,10 0 0 0 8,8 z')
-				.eachPoint((point, isControlPoint) => { // eslint-disable-line complexity
-					if (point.isSame([1, 1]) && isControlPoint === false) {
+				.eachPoint((point, isControlPoint, index) => { // eslint-disable-line complexity
+					if (point.isSame([1, 1]) && isControlPoint === false && index === 0) {
 						count++;
 					}
-					else if (point.isSame([4, 4]) && isControlPoint === false) {
+					else if (point.isSame([4, 4]) && isControlPoint === false && index === 1) {
 						count++;
 					}
-					else if (point.isSame([50, 50]) && isControlPoint === false) {
+					else if (point.isSame([50, 50]) && isControlPoint === false && index === 2) {
 						count++;
 					}
-					else if (point.isSame([2, 2]) && isControlPoint === false) {
+					else if (point.isSame([2, 2]) && isControlPoint === false && index === 4) {
 						count++;
 					}
-					else if (point.isSame([2, 4]) && isControlPoint === true) {
+					else if (point.isSame([2, 4]) && isControlPoint === true && index === 5) {
 						count++;
 					}
-					else if (point.isSame([4, 4]) && isControlPoint === true) {
+					else if (point.isSame([4, 4]) && isControlPoint === true && index === 5) {
 						count++;
 					}
-					else if (point.isSame([4, 2]) && isControlPoint === false) {
+					else if (point.isSame([4, 2]) && isControlPoint === false && index === 5) {
 						count++;
 					}
-					else if (point.isSame([3, 3]) && isControlPoint === true) {
+					else if (point.isSame([3, 3]) && isControlPoint === true && index === 6) {
 						count++;
 					}
-					else if (point.isSame([6, 2]) && isControlPoint === false) {
+					else if (point.isSame([6, 2]) && isControlPoint === false && index === 6) {
 						count++;
 					}
-					else if (point.isSame([8, 8]) && isControlPoint === false) {
+					else if (point.isSame([8, 8]) && isControlPoint === false && index === 7) {
 						count++;
 					}
 

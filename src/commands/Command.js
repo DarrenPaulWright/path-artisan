@@ -193,10 +193,10 @@ export default class Command {
 		return new Point();
 	}
 
-	eachPoint(settings, callback) {
+	eachPoint(settings, callback, index) {
 		const point = this.position(settings.currentPoint);
 
-		callback(point, false);
+		callback(point, false, index);
 
 		settings.currentPoint = point;
 	}

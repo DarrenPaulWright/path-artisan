@@ -10,11 +10,11 @@ export default class Quadratic extends Cubic {
 		}
 	}
 
-	eachPoint(settings, callback) {
+	eachPoint(settings, callback, index) {
 		const point = this.position(settings.currentPoint);
 
-		callback(this.convertPoint(this[DATA][0], settings.currentPoint), true);
-		callback(point, false);
+		callback(this.convertPoint(this[DATA][0], settings.currentPoint), true, index);
+		callback(point, false, index);
 
 		settings.currentPoint = point;
 	}

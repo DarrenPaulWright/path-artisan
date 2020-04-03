@@ -41,12 +41,12 @@ export default class Cubic extends Command {
 		return controlPoint.isSame(origin);
 	}
 
-	eachPoint(settings, callback) {
+	eachPoint(settings, callback, index) {
 		const point = this.position(settings.currentPoint);
 
-		callback(this.convertPoint(this[DATA][0], settings.currentPoint), true);
-		callback(this.convertPoint(this[DATA][1], settings.currentPoint), true);
-		callback(point, false);
+		callback(this.convertPoint(this[DATA][0], settings.currentPoint), true, index);
+		callback(this.convertPoint(this[DATA][1], settings.currentPoint), true, index);
+		callback(point, false, index);
 
 		settings.currentPoint = point;
 	}
