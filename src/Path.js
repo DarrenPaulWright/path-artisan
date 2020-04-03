@@ -146,6 +146,7 @@ export default class Path {
 	 *
 	 * @memberOf Path
 	 * @instance
+	 * @chainable
 	 *
 	 * @param {string} path - A valid path data string or polygon string.
 	 *
@@ -216,9 +217,11 @@ export default class Path {
 	 *
 	 * @memberOf Path
 	 * @instance
+	 * @chainable
 	 *
 	 * @param {...number} args - x and y coordinates.
-	 * @returns {*}
+	 *
+	 * @returns {object} this
 	 */
 	move(...args) {
 		return this[add](Move, args);
@@ -229,9 +232,11 @@ export default class Path {
 	 *
 	 * @memberOf Path
 	 * @instance
+	 * @chainable
 	 *
 	 * @param {...number} args - x and y coordinates.
-	 * @returns {*}
+	 *
+	 * @returns {object} this
 	 */
 	line(...args) {
 		return this[add](Line, args);
@@ -242,9 +247,11 @@ export default class Path {
 	 *
 	 * @memberOf Path
 	 * @instance
+	 * @chainable
 	 *
 	 * @param {...number} args - Series of coordinates.
-	 * @returns {*}
+	 *
+	 * @returns {object} this
 	 */
 	cubic(...args) {
 		return this[add](Cubic, args);
@@ -255,9 +262,11 @@ export default class Path {
 	 *
 	 * @memberOf Path
 	 * @instance
+	 * @chainable
 	 *
 	 * @param {...number} args - Series of coordinates.
-	 * @returns {*}
+	 *
+	 * @returns {object} this
 	 */
 	quadratic(...args) {
 		return this[add](Quadratic, args);
@@ -268,9 +277,11 @@ export default class Path {
 	 *
 	 * @memberOf Path
 	 * @instance
+	 * @chainable
 	 *
 	 * @param {...number} args - Series of coordinates / values.
-	 * @returns {*}
+	 *
+	 * @returns {object} this
 	 */
 	arc(...args) {
 		return this[add](Arc, args);
@@ -281,9 +292,11 @@ export default class Path {
 	 *
 	 * @memberOf Path
 	 * @instance
+	 * @chainable
 	 *
 	 * @param {...number} args - Move to coordinates.
-	 * @returns {*}
+	 *
+	 * @returns {object} this
 	 */
 	close(...args) {
 		return this[add](Close, args);
@@ -294,9 +307,12 @@ export default class Path {
 	 *
 	 * @memberOf Path
 	 * @instance
+	 * @chainable
 	 *
 	 * @param {integer} index - Index of the command to update.
 	 * @param {string|number[]} values - New values for the command at this index.
+	 *
+	 * @returns {object} this
 	 */
 	update(index, values) {
 		const command = this[PATH][index];
@@ -304,6 +320,8 @@ export default class Path {
 		if (command !== undefined) {
 			command.set(values);
 		}
+
+		return this;
 	}
 
 	/**
@@ -311,8 +329,11 @@ export default class Path {
 	 *
 	 * @memberOf Path
 	 * @instance
+	 * @chainable
 	 *
 	 * @param {Function} callback - Provides three arguments: the Point, a boolean indicating if the point is a control point, and the command index.
+	 *
+	 * @returns {object} this
 	 */
 	eachPoint(callback) {
 		this[PATH].forEach((command, index) => {
@@ -321,6 +342,8 @@ export default class Path {
 				subPathStart: origin
 			}, callback, index);
 		});
+
+		return this;
 	}
 
 	/**
@@ -330,7 +353,7 @@ export default class Path {
 	 * @instance
 	 *
 	 * @param {object} [settings] - Optional settings object.
-	 * @param {string} [settings.coordinates='initial'] - 'absolute' to convert all coordinates to absolute, 'relative' to convert all coordinates to relative, 'auto' to convert coordinates to whichever is the fewest characters, 'initial' (default) to retain the coordinates set on each command
+	 * @param {string} [settings.coordinates=initial] - 'absolute' to convert all coordinates to absolute, 'relative' to convert all coordinates to relative, 'auto' to convert coordinates to whichever is the fewest characters, 'initial' (default) to retain the coordinates set on each command
 	 * @param {boolean} [settings.compress] - Remove excess whitespace and unnecessary characters.
 	 * @param {boolean} [settings.combine=true] - Combine consecutive commands that are redundant.
 	 * @param {integer} [settings.fractionDigits=3] - Round all numbers in path to a specified number of fraction digits.
@@ -398,5 +421,17 @@ export default class Path {
 			return nextCommands.length === 0;
 		})
 			.then(() => output.trim());
+	}
+
+	/**
+	 * The total number of commands in this path.
+	 *
+	 * @memberOf Path
+	 * @instance
+	 *
+	 * @returns {integer}
+	 */
+	get length() {
+		return this[PATH].length;
 	}
 }
