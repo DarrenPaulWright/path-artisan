@@ -24,15 +24,16 @@ npm install pathinator
 
 * [Path](#Path)
     * [new Path([path])](#new_Path_new)
+    * [.length](#Path+length) ⇒ <code>integer</code>
     * [.import(path)](#Path+import) ⇒ <code>object</code>
-    * [.move(...args)](#Path+move) ⇒ <code>\*</code>
-    * [.line(...args)](#Path+line) ⇒ <code>\*</code>
-    * [.cubic(...args)](#Path+cubic) ⇒ <code>\*</code>
-    * [.quadratic(...args)](#Path+quadratic) ⇒ <code>\*</code>
-    * [.arc(...args)](#Path+arc) ⇒ <code>\*</code>
-    * [.close(...args)](#Path+close) ⇒ <code>\*</code>
-    * [.update(index, values)](#Path+update)
-    * [.eachPoint(callback)](#Path+eachPoint)
+    * [.move(...args)](#Path+move) ⇒ <code>object</code>
+    * [.line(...args)](#Path+line) ⇒ <code>object</code>
+    * [.cubic(...args)](#Path+cubic) ⇒ <code>object</code>
+    * [.quadratic(...args)](#Path+quadratic) ⇒ <code>object</code>
+    * [.arc(...args)](#Path+arc) ⇒ <code>object</code>
+    * [.close(...args)](#Path+close) ⇒ <code>object</code>
+    * [.update(index, values)](#Path+update) ⇒ <code>object</code>
+    * [.eachPoint(callback)](#Path+eachPoint) ⇒ <code>object</code>
     * [.export([settings])](#Path+export) ⇒ <code>Promise.&lt;string&gt;</code>
 
 
@@ -57,9 +58,16 @@ const path = new Path()
     .close();
 ```
 
+<br><a name="Path+length"></a>
+
+### path.length ⇒ <code>integer</code>
+> The total number of commands in this path.
+
+
 <br><a name="Path+import"></a>
 
-### path.import(path) ⇒ <code>object</code>
+### path.import(path) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
 > Import a path string.
 
 **Returns**: <code>object</code> - this  
@@ -71,9 +79,11 @@ const path = new Path()
 
 <br><a name="Path+move"></a>
 
-### path.move(...args) ⇒ <code>\*</code>
+### path.move(...args) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
 > Add a [move](https://www.w3.org/TR/SVG/paths.html#PathDataMovetoCommands) command.
 
+**Returns**: <code>object</code> - this  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -82,9 +92,11 @@ const path = new Path()
 
 <br><a name="Path+line"></a>
 
-### path.line(...args) ⇒ <code>\*</code>
+### path.line(...args) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
 > Add a [line](https://www.w3.org/TR/SVG/paths.html#PathDataLinetoCommands) command.
 
+**Returns**: <code>object</code> - this  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -93,9 +105,11 @@ const path = new Path()
 
 <br><a name="Path+cubic"></a>
 
-### path.cubic(...args) ⇒ <code>\*</code>
+### path.cubic(...args) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
 > Add a [quadratic bezier curve](https://www.w3.org/TR/SVG/paths.html#PathDataCubicBezierCommands) command.
 
+**Returns**: <code>object</code> - this  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -104,9 +118,11 @@ const path = new Path()
 
 <br><a name="Path+quadratic"></a>
 
-### path.quadratic(...args) ⇒ <code>\*</code>
+### path.quadratic(...args) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
 > Add a [quadratic bezier curve](https://www.w3.org/TR/SVG/paths.html#PathDataQuadraticBezierCommands) command.
 
+**Returns**: <code>object</code> - this  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -115,9 +131,11 @@ const path = new Path()
 
 <br><a name="Path+arc"></a>
 
-### path.arc(...args) ⇒ <code>\*</code>
+### path.arc(...args) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
 > Add an [arc](https://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands) command.
 
+**Returns**: <code>object</code> - this  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -126,9 +144,11 @@ const path = new Path()
 
 <br><a name="Path+close"></a>
 
-### path.close(...args) ⇒ <code>\*</code>
+### path.close(...args) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
 > Add a [close](https://www.w3.org/TR/SVG/paths.html#PathDataClosePathCommand) command.
 
+**Returns**: <code>object</code> - this  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -137,9 +157,11 @@ const path = new Path()
 
 <br><a name="Path+update"></a>
 
-### path.update(index, values)
+### path.update(index, values) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
 > Update command values at a specific index.
 
+**Returns**: <code>object</code> - this  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -149,9 +171,11 @@ const path = new Path()
 
 <br><a name="Path+eachPoint"></a>
 
-### path.eachPoint(callback)
+### path.eachPoint(callback) ⇒ <code>object</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_`🔗 Chainable`_
+
 > Calls  callback for each point in the path.
 
+**Returns**: <code>object</code> - this  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -167,7 +191,7 @@ const path = new Path()
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [settings] | <code>object</code> |  | Optional settings object. |
-| [settings.coordinates] | <code>string</code> | <code>&quot;&#x27;initial&#x27;&quot;</code> | 'absolute' to convert all coordinates to absolute, 'relative' to convert all coordinates to relative, 'auto' to convert coordinates to whichever is the fewest characters, 'initial' (default) to retain the coordinates set on each command |
+| [settings.coordinates] | <code>string</code> | <code>&quot;initial&quot;</code> | 'absolute' to convert all coordinates to absolute, 'relative' to convert all coordinates to relative, 'auto' to convert coordinates to whichever is the fewest characters, 'initial' (default) to retain the coordinates set on each command |
 | [settings.compress] | <code>boolean</code> |  | Remove excess whitespace and unnecessary characters. |
 | [settings.combine] | <code>boolean</code> | <code>true</code> | Combine consecutive commands that are redundant. |
 | [settings.fractionDigits] | <code>integer</code> | <code>3</code> | Round all numbers in path to a specified number of fraction digits. |
