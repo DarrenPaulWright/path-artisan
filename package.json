@@ -1,6 +1,6 @@
 {
 	"name": "pathinator",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "SVG path builder and minifier",
 	"author": {
 		"name": "Darren Paul Wright",
