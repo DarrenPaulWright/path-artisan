@@ -81,9 +81,9 @@
 	"homepage": "https://github.com/DarrenPaulWright/pathinator#readme",
 	"dependencies": {
 		"async-agent": "^0.5.4",
-		"hord": "^0.7.2",
-		"type-enforcer": "^1.1.5",
-		"type-enforcer-math": "^1.2.4"
+		"hord": "^0.7.3",
+		"type-enforcer": "^1.2.0",
+		"type-enforcer-math": "^1.3.0"
 	},
 	"devDependencies": {
 		"display-value": "^1.7.3",
