@@ -2,7 +2,7 @@ import { benchSettings } from 'karma-webpack-bundle';
 import Command from '../../src/commands/Command.js';
 
 suite('Command', () => {
-	let temporaryTarget = {}; // eslint-disable-line no-unused-vars
+	let temporaryTarget = {};
 
 	benchmark('single point', () => {
 		temporaryTarget = Command.clean('1,2');
@@ -17,6 +17,6 @@ suite('Command', () => {
 	}, benchSettings);
 
 	benchmark('three points dirty', () => {
-		temporaryTarget = Command.clean(' 123.456\t,0.6\r-3 ,-123.456\n 5-0.6   ');
+		temporaryTarget = Command.clean(' 123.456\t,0.6\r-3 ,-123.456\n 5-0.6   '); // eslint-disable-line no-unused-vars
 	}, benchSettings);
 });

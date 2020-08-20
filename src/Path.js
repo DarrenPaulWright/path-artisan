@@ -134,7 +134,7 @@ const SUB_PATH_START = Symbol();
  * @category 2
  * @class Path
  *
- * @arg {string} [path] - Optional path data to parse.
+ * @param {string} [path] - Optional path data to parse.
  */
 export default class Path {
 	constructor(path) {
@@ -150,7 +150,7 @@ export default class Path {
 	 *
 	 * @param {string} path - A valid path data string or polygon string.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	import(path) {
 		this[PATH] = [];
@@ -219,9 +219,9 @@ export default class Path {
 	 * @instance
 	 * @chainable
 	 *
-	 * @param {...number} args - x and y coordinates.
+	 * @param {...number} args - X and y coordinates.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	move(...args) {
 		return this[add](Move, args);
@@ -234,9 +234,9 @@ export default class Path {
 	 * @instance
 	 * @chainable
 	 *
-	 * @param {...number} args - x and y coordinates.
+	 * @param {...number} args - X and y coordinates.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	line(...args) {
 		return this[add](Line, args);
@@ -251,7 +251,7 @@ export default class Path {
 	 *
 	 * @param {...number} args - Series of coordinates.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	cubic(...args) {
 		return this[add](Cubic, args);
@@ -266,7 +266,7 @@ export default class Path {
 	 *
 	 * @param {...number} args - Series of coordinates.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	quadratic(...args) {
 		return this[add](Quadratic, args);
@@ -281,7 +281,7 @@ export default class Path {
 	 *
 	 * @param {...number} args - Series of coordinates / values.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	arc(...args) {
 		return this[add](Arc, args);
@@ -296,7 +296,7 @@ export default class Path {
 	 *
 	 * @param {...number} args - Move to coordinates.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	close(...args) {
 		return this[add](Close, args);
@@ -312,7 +312,7 @@ export default class Path {
 	 * @param {integer} index - Index of the command to update.
 	 * @param {string|number[]} values - New values for the command at this index.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	update(index, values) {
 		const command = this[PATH][index];
@@ -333,7 +333,7 @@ export default class Path {
 	 *
 	 * @param {Function} callback - Provides three arguments: the Point, a boolean indicating if the point is a control point, and the command index.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	eachPoint(callback) {
 		this[PATH].forEach((command, index) => {
@@ -355,10 +355,10 @@ export default class Path {
 	 *
 	 * @param {object} [settings] - Optional settings object.
 	 * @param {integer} [settings.fractionDigits=3] - Round all numbers in path to a specified number of fraction digits.
-	 * @param {number|Point} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point
-	 * @param {number|Point} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point
+	 * @param {number|Point} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point.
+	 * @param {number|Point} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point.
 	 *
-	 * @returns {object} this
+	 * @returns {object} Returns this.
 	 */
 	transform(settings) {
 		settings = {
@@ -380,13 +380,12 @@ export default class Path {
 	 * @instance
 	 *
 	 * @param {object} [settings] - Optional settings object.
-	 * @param {string} [settings.coordinates=initial] - 'absolute' to convert all coordinates to absolute, 'relative' to convert all coordinates to relative, 'auto' to convert coordinates to whichever is the fewest characters, 'initial' (default) to retain the coordinates set on each command
+	 * @param {string} [settings.coordinates=initial] - Can be 'absolute' to convert all coordinates to absolute, 'relative' to convert all coordinates to relative, 'auto' to convert coordinates to whichever is the fewest characters, 'initial' (default) to retain the coordinates set on each command.
 	 * @param {boolean} [settings.compress] - Remove excess whitespace and unnecessary characters.
 	 * @param {boolean} [settings.combine=true] - Combine consecutive commands that are redundant.
 	 * @param {integer} [settings.fractionDigits=3] - Round all numbers in path to a specified number of fraction digits.
-	 * @param {number|Point} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point
-	 * @param {number|Point} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point
-	 *
+	 * @param {number|Point} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point.
+	 * @param {number|Point} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point.
 	 * @param {number|Point} [settings.maxCharsPerLine] - Add newlines at logical breaks in the path to improve readability.
 	 * @param {number|Point} [settings.commandsOnNewLines] - Add a newline between each command.
 	 * @param {boolean} [settings.toPolygon] - Format the string for use in a polygon element. Sets coordinates to 'absolute'.
