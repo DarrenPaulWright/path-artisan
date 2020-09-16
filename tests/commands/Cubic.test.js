@@ -13,6 +13,33 @@ describe('Cubic', () => {
 		});
 	});
 
+	describe('.split', () => {
+		it('should return an empty array when an empty string is provided', () => {
+			assert.equal(Cubic.split(['']), []);
+		});
+
+		it('should return an empty array when one point is provided', () => {
+			assert.equal(Cubic.split(['1,2']), []);
+		});
+
+		it('should return an empty array when two points are provided', () => {
+			assert.equal(Cubic.split(['1,2 3,4']), []);
+		});
+
+		it('should return 3 Points when 3 are provided', () => {
+			assert.equal(Cubic.split(['1,2 3,4 5,6']), [
+				[new Point(1, 2), new Point(3, 4), new Point(5, 6)]
+			]);
+		});
+
+		it('should return multiple Points when multiple are provided', () => {
+			assert.equal(Cubic.split(['1,2 3,4 5,6 1,2 3,4 5,6 7,8']), [
+				[new Point(1, 2), new Point(3, 4), new Point(5, 6)],
+				[new Point(1, 2), new Point(3, 4), new Point(5, 6)]
+			]);
+		});
+	});
+
 	describe('shorthand', () => {
 		let settings = {};
 

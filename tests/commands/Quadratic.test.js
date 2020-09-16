@@ -5,6 +5,30 @@ import Quadratic from '../../src/commands/Quadratic.js';
 describe('Quadratic', () => {
 	const currentPoint = Object.freeze(new Point(10, 10));
 
+	describe('.split', () => {
+		it('should return an empty array when an empty string is provided', () => {
+			assert.equal(Quadratic.split(['']), []);
+		});
+
+		it('should return an empty array when one point is provided', () => {
+			assert.equal(Quadratic.split(['1,2']), []);
+		});
+
+		it('should return 2 points when 2 points are provided', () => {
+			assert.equal(Quadratic.split(['1,2 3,4']), [
+				[new Point(1, 2), new Point(3, 4)]
+			]);
+		});
+
+		it('should return multiple Points when multiple are provided', () => {
+			assert.equal(Quadratic.split(['1,2 3,4 5,6 1,2 3,4 5,6 7,8']), [
+				[new Point(1, 2), new Point(3, 4)],
+				[new Point(5, 6), new Point(1, 2)],
+				[new Point(3, 4), new Point(5, 6)]
+			]);
+		});
+	});
+
 	describe('controlPoint', () => {
 		it('should return diff to the second controlPoint', () => {
 			const quadratic = new Quadratic(['4,2 4,0']);

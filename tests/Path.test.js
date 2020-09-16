@@ -9,110 +9,161 @@ const testValues = [{
 	absolute: 'M 5,6',
 	relative: 'm 5,6',
 	initial: 'm 5,6',
-	auto: 'm 5,6'
+	auto: 'M 5,6'
 }, {
 	note: 'remove new lines',
 	input: 'M\r 5,\n6',
 	absolute: 'M 5,6',
 	relative: 'm 5,6',
 	initial: 'M 5,6',
-	auto: 'm 5,6'
+	auto: 'M 5,6'
 }, {
 	note: 'relative line',
 	input: 'm 5,6 l10,12',
 	absolute: 'M 5,6 L 15,18',
 	relative: 'm 5,6 l 10,12',
 	initial: 'm 5,6 l 10,12',
-	auto: 'm 5,6 l 10,12'
+	auto: 'M 5,6 L 15,18'
 }, {
 	note: 'relative line with close',
 	input: 'm 5,6 l10,12 z',
 	absolute: 'M 5,6 L 15,18 Z',
 	relative: 'm 5,6 l 10,12 z',
 	initial: 'm 5,6 l 10,12 z',
-	auto: 'm 5,6 l 10,12 z'
+	auto: 'M 5,6 L 15,18 Z'
 }, {
 	note: 'relative line with absolute close',
 	input: 'm 5,6 l10,12 Z',
 	absolute: 'M 5,6 L 15,18 Z',
 	relative: 'm 5,6 l 10,12 z',
 	initial: 'm 5,6 l 10,12 Z',
-	auto: 'm 5,6 l 10,12 z'
+	auto: 'M 5,6 L 15,18 Z'
 }, {
 	note: 'two relative lines inline',
 	input: 'm 5,6 l10,12 l10,12 z',
 	absolute: 'M 5,6 L 25,30 Z',
 	relative: 'm 5,6 l 20,24 z',
-	initial: 'm 5,6 l 10,12 l 10,12 z',
-	auto: 'm 5,6 l 20,24 z'
+	initial: 'm 5,6 l 10,12 10,12 z',
+	auto: 'M 5,6 L 25,30 Z'
+}, {
+	note: 'relative line with consecutive commands',
+	input: 'm 5,6 l10,12 8,12 8,12 z',
+	absolute: 'M 5,6 L 15,18 31,42 Z',
+	relative: 'm 5,6 l 10,12 16,24 z',
+	initial: 'm 5,6 l 10,12 8,12 8,12 z',
+	auto: 'M 5,6 L 15,18 31,42 Z'
 }, {
 	note: 'an absolute and relative lines inline',
 	input: 'm 5,6 L10,12 l10,12 z',
 	absolute: 'M 5,6 L 20,24 Z',
 	relative: 'm 5,6 l 15,18 z',
 	initial: 'm 5,6 L 10,12 l 10,12 z',
-	auto: 'm 5,6 l 15,18 z'
+	auto: 'M 5,6 L 20,24 Z'
 }, {
 	note: 'relative horizontal',
 	input: 'm 5,6 h6 z',
 	absolute: 'M 5,6 H 11 Z',
 	relative: 'm 5,6 h 6 z',
 	initial: 'm 5,6 h 6 z',
-	auto: 'm 5,6 h 6 z'
+	auto: 'M 5,6 h 6 Z'
 }, {
 	note: 'absolute horizontal',
 	input: 'm 5,6 H6 z',
 	absolute: 'M 5,6 H 6 Z',
 	relative: 'm 5,6 h 1 z',
 	initial: 'm 5,6 H 6 z',
-	auto: 'm 5,6 h 1 z'
+	auto: 'M 5,6 H 6 Z'
 }, {
 	note: 'relative vertical',
 	input: 'm 5,6 v6 z',
 	absolute: 'M 5,6 V 12 Z',
 	relative: 'm 5,6 v 6 z',
 	initial: 'm 5,6 v 6 z',
-	auto: 'm 5,6 v 6 z'
+	auto: 'M 5,6 v 6 Z'
 }, {
 	note: 'absolute vertical',
 	input: 'm 5,6 V7 z',
 	absolute: 'M 5,6 V 7 Z',
 	relative: 'm 5,6 v 1 z',
 	initial: 'm 5,6 V 7 z',
-	auto: 'm 5,6 v 1 z'
+	auto: 'M 5,6 V 7 Z'
 }, {
+	note: '',
 	input: 'm 5,6 L10,12 l10,12 zm 5,6 L10,12 l10,12 z',
 	absolute: 'M 5,6 L 20,24 Z M 10,12 L 20,24 Z',
 	relative: 'm 5,6 l 15,18 z m 5,6 l 10,12 z',
 	initial: 'm 5,6 L 10,12 l 10,12 z m 5,6 l 10,12 z',
-	auto: 'm 5,6 l 15,18 z m 5,6 l 10,12 z'
+	auto: 'M 5,6 L 20,24 Z m 5,6 L 20,24 Z'
 }, {
+	note: '',
 	input: 'm 5,6 L10,12 l10,12 zM -500,-600 L7,8 l10,12 z',
-	absolute: 'M 5,6 L 20,24 Z M -500,-600 L 7,8 L 17,20 Z',
-	relative: 'm 5,6 l 15,18 z m -505,-606 l 507,608 l 10,12 z',
+	absolute: 'M 5,6 L 20,24 Z M -500,-600 L 7,8 17,20 Z',
+	relative: 'm 5,6 l 15,18 z m -505,-606 l 507,608 10,12 z',
 	initial: 'm 5,6 L 10,12 l 10,12 z M -500,-600 L 7,8 l 10,12 z',
-	auto: 'm 5,6 l 15,18 z m -505,-606 L 7,8 l 10,12 z'
+	auto: 'M 5,6 L 20,24 Z M -500,-600 L 7,8 17,20 Z'
+}, {
+	note: 'Cubic consecutive',
+	input: 'm 2,2 C 2,4 4,4 4,2 4,6 6,6 6,4 z',
+	absolute: 'M 2,2 C 2,4 4,4 4,2 4,6 6,6 6,4 Z',
+	relative: 'm 2,2 c 0,2 2,2 2,0 0,4 2,4 2,2 z',
+	initial: 'm 2,2 C 2,4 4,4 4,2 4,6 6,6 6,4 z',
+	auto: 'M 2,2 C 2,4 4,4 4,2 4,6 6,6 6,4 Z'
 }, {
 	note: 'Cubic shorthand',
 	input: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 s 2,2 2,0 z',
-	absolute: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 S 8,4 8,2 Z',
-	relative: 'm 2,2 c 0,2 2,2 2,0 s 2,-2 2,0 s 2,2 2,0 z',
+	absolute: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,4 8,2 Z',
+	relative: 'm 2,2 c 0,2 2,2 2,0 s 2,-2 2,0 2,2 2,0 z',
 	initial: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 s 2,2 2,0 z',
-	auto: 'm 2,2 c 0,2 2,2 2,0 S 6,0 6,2 s 2,2 2,0 z'
+	auto: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,4 8,2 Z'
+}, {
+	note: 'Cubic to consecutive shorthand',
+	input: 'm 2,2 C 2,4 4,4 4,2 4,0 6,0 6,2 6,4 8,0 8,2 z',
+	absolute: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
+	relative: 'm 2,2 c 0,2 2,2 2,0 s 2,-2 2,0 2,-2 2,0 z',
+	initial: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 z',
+	auto: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z'
+}, {
+	note: 'Cubic shorthand consecutive',
+	input: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
+	absolute: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
+	relative: 'm 2,2 c 0,2 2,2 2,0 s 2,-2 2,0 2,-2 2,0 z',
+	initial: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
+	auto: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z'
 }, {
 	note: 'Quadratic shorthand',
 	input: 'm 2,2 Q 3,3 4,2 T 6,2 t 2,0 z',
-	absolute: 'M 2,2 Q 3,3 4,2 T 6,2 T 8,2 Z',
-	relative: 'm 2,2 q 1,1 2,0 t 2,0 t 2,0 z',
+	absolute: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',
+	relative: 'm 2,2 q 1,1 2,0 t 2,0 2,0 z',
 	initial: 'm 2,2 Q 3,3 4,2 T 6,2 t 2,0 z',
-	auto: 'm 2,2 q 1,1 2,0 t 2,0 t 2,0 z'
+	auto: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z'
+}, {
+	note: 'Quadratic to consecutive shorthand',
+	input: 'm 2,2 Q 3,3 4,2 5,1 6,2 7,3 8,2 z',
+	absolute: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',
+	relative: 'm 2,2 q 1,1 2,0 t 2,0 2,0 z',
+	initial: 'm 2,2 Q 3,3 4,2 T 6,2 8,2 z',
+	auto: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z'
+}, {
+	note: 'Quadratic shorthand consecutive',
+	input: 'm 2,2 Q 3,3 4,2 T 6,2 8,2 z',
+	absolute: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',
+	relative: 'm 2,2 q 1,1 2,0 t 2,0 2,0 z',
+	initial: 'm 2,2 Q 3,3 4,2 T 6,2 8,2 z',
+	auto: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z'
 }, {
 	note: 'Arc',
 	input: 'm 2,2 A 10,10 0 0 0 8,8 a 5,5 0 0 0 12,12 z',
-	absolute: 'M 2,2 A 10,10 0 0 0 8,8 A 5,5 0 0 0 20,20 Z',
-	relative: 'm 2,2 a 10,10 0 0 0 6,6 a 5,5 0 0 0 12,12 z',
+	absolute: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 20,20 Z',
+	relative: 'm 2,2 a 10,10 0 0 0 6,6 5,5 0 0 0 12,12 z',
 	initial: 'm 2,2 A 10,10 0 0 0 8,8 a 5,5 0 0 0 12,12 z',
-	auto: 'm 2,2 a 10,10 0 0 0 6,6 a 5,5 0 0 0 12,12 z'
+	auto: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 20,20 Z'
+}, {
+	note: 'Arc consecutive',
+	input: 'm 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 17,17 z',
+	absolute: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 17,17 Z',
+	relative: 'm 2,2 a 10,10 0 0 0 6,6 5,5 0 0 0 9,9 z',
+	initial: 'm 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 17,17 z',
+	auto: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 17,17 Z'
 }];
 
 describe('Path', () => {
@@ -131,7 +182,7 @@ describe('Path', () => {
 				.import('50,50 100,100 200,150')
 				.export()
 				.then((string) => {
-					assert.is(string, 'M 50,50 L 100,100 L 200,150 Z');
+					assert.is(string, 'M 50,50 L 100,100 200,150 Z');
 				});
 		});
 	});
@@ -286,7 +337,7 @@ describe('Path', () => {
 				.then((result) => {
 					assert.is(
 						result,
-						'm 22,22 L 28,28 L 120,120 z M 24,24 C 24,28 28,28 28,24 Q 26,26 32,24 A 20,20 0 0 0 36,36 z'
+						'm 22,22 L 28,28 120,120 z M 24,24 C 24,28 28,28 28,24 Q 26,26 32,24 A 20,20 0 0 0 36,36 z'
 					);
 				});
 		});
@@ -295,7 +346,7 @@ describe('Path', () => {
 	describe('export', () => {
 		testValues
 			.forEach((data) => {
-				it(`should convert ${displayValue(data.input)} to absolute coordinates`, () => {
+				it(`should convert ${displayValue(data.input)} to absolute coordinates (${data.note})`, () => {
 					return new Path(data.input)
 						.export({
 							coordinates: 'absolute'
@@ -305,7 +356,7 @@ describe('Path', () => {
 						});
 				});
 
-				it(`should convert ${displayValue(data.input)} to absolute coordinates when async = true`, () => {
+				it(`should convert ${displayValue(data.input)} to absolute coordinates when async = true (${data.note})`, () => {
 					return new Path(data.input)
 						.export({
 							coordinates: 'absolute',
@@ -316,7 +367,7 @@ describe('Path', () => {
 						});
 				});
 
-				it(`should convert ${displayValue(data.input)} to relative coordinates`, () => {
+				it(`should convert ${displayValue(data.input)} to relative coordinates (${data.note})`, () => {
 					return new Path(data.input)
 						.export({
 							coordinates: 'relative'
@@ -326,7 +377,7 @@ describe('Path', () => {
 						});
 				});
 
-				it(`should convert ${displayValue(data.input)} to relative coordinates, when async = true`, () => {
+				it(`should convert ${displayValue(data.input)} to relative coordinates, when async = true (${data.note})`, () => {
 					return new Path(data.input)
 						.export({
 							coordinates: 'relative',
@@ -338,7 +389,7 @@ describe('Path', () => {
 				});
 
 				if (data.initial !== undefined) {
-					it(`should convert ${displayValue(data.input)} to its initial coordinates`, () => {
+					it(`should convert ${displayValue(data.input)} to its initial coordinates (${data.note})`, () => {
 						return new Path(data.input)
 							.export({
 								combine: false
@@ -350,7 +401,7 @@ describe('Path', () => {
 				}
 
 				if (data.auto !== undefined) {
-					it(`should convert ${displayValue(data.input)} to auto coordinates`, () => {
+					it(`should convert ${displayValue(data.input)} to auto coordinates (${data.note})`, () => {
 						return new Path(data.input)
 							.export({
 								coordinates: 'auto'
@@ -368,7 +419,7 @@ describe('Path', () => {
 					coordinates: 'auto'
 				})
 				.then((path) => {
-					assert.is(path, 'm -500,-600 L 7,8 l 10,12 z');
+					assert.is(path, 'M -500,-600 L 7,8 17,20 Z');
 				});
 		});
 
@@ -379,7 +430,7 @@ describe('Path', () => {
 					compress: true
 				})
 				.then((path) => {
-					assert.is(path, 'm-500-600L7,8l10,12z');
+					assert.is(path, 'M-500-600L7,8,17,20Z');
 				});
 		});
 

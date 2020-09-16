@@ -25,6 +25,24 @@ describe('Move', () => {
 		assert.equal(move.export(settings, []), 'm 3,4');
 	});
 
+	describe('.split', () => {
+		it('should return an empty array when an empty string is provided', () => {
+			assert.equal(Move.split(['']), []);
+		});
+
+		it('should return a Point when one point is provided', () => {
+			assert.equal(Move.split(['1,2']), [[new Point(1, 2)]]);
+		});
+
+		it('should return multiple Points when multiple are provided', () => {
+			assert.equal(Move.split(['1,2 3,4 5,6']), [
+				[new Point(1, 2)],
+				[new Point(3, 4)],
+				[new Point(5, 6)]
+			]);
+		});
+	});
+
 	describe('toAbsolute', () => {
 		let settings = {};
 

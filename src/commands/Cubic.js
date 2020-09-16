@@ -4,6 +4,10 @@ import Command from './Command.js';
 export const DATA = Symbol();
 
 export default class Cubic extends Command {
+	static split(args, isShorthand = false) {
+		return Command.split(args, isShorthand ? 2 : 3);
+	}
+
 	set(args, previous, currentPoint) {
 		this[DATA] = Cubic.parseArgs(args);
 
@@ -64,12 +68,16 @@ export default class Cubic extends Command {
 		let result = '';
 
 		if (!settings.toPolygon) {
+			this.isExportedAbsolute = settings.toAbsolute;
+			
 			if (this.isShorthand(settings, control1)) {
-				result = Cubic.label('S', 's', settings) +
+				this.isExportedShorthand = true;
+				result = Cubic.label('S', 's', settings, this) +
 					Cubic.pointToString(control2, settings);
 			}
 			else {
-				result = Cubic.label('C', 'c', settings) +
+				this.isExportedShorthand = false;
+				result = Cubic.label('C', 'c', settings, this) +
 					Cubic.pointToString(control1, settings) +
 					Cubic.pointToString(control2, settings, true);
 			}

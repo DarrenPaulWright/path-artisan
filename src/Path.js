@@ -11,24 +11,24 @@ import Quadratic from './commands/Quadratic.js';
 import origin from './utility/origin.js';
 
 const commands = {
-	m: (path, data) => path.move(data),
-	M: (path, data) => path.move(data, true),
-	l: (path, data) => path.line(data),
-	L: (path, data) => path.line(data, true),
-	h: (path, data) => path.line(data, 0),
-	H: (path, data, currentPoint) => path.line(data, currentPoint.y, true),
-	v: (path, data) => path.line(0, data),
-	V: (path, data, currentPoint) => path.line(currentPoint.x, data, true),
-	c: (path, data) => path.cubic(data),
-	C: (path, data) => path.cubic(data, true),
-	s: (path, data) => path.cubic(data),
-	S: (path, data) => path.cubic(data, true),
-	q: (path, data) => path.quadratic(data),
-	Q: (path, data) => path.quadratic(data, true),
-	t: (path, data) => path.quadratic(data),
-	T: (path, data) => path.quadratic(data, true),
-	a: (path, data) => path.arc(data),
-	A: (path, data) => path.arc(data, true),
+	m: (path, data) => path[add](Move, [data]),
+	M: (path, data) => path[add](Move, [data, true]),
+	l: (path, data) => path[add](Line, [data]),
+	L: (path, data) => path[add](Line, [data, true]),
+	h: (path, data) => path[add](Line, [data, 0], true),
+	H: (path, data, currentPoint) => path[add](Line, [data, currentPoint.y, true], true),
+	v: (path, data) => path[add](Line, [0, data], true),
+	V: (path, data, currentPoint) => path[add](Line, [currentPoint.x, data, true], true),
+	c: (path, data) => path[add](Cubic, [data]),
+	C: (path, data) => path[add](Cubic, [data, true]),
+	s: (path, data) => path[add](Cubic, [data], true),
+	S: (path, data) => path[add](Cubic, [data, true], true),
+	q: (path, data) => path[add](Quadratic, [data]),
+	Q: (path, data) => path[add](Quadratic, [data, true]),
+	t: (path, data) => path[add](Quadratic, [data], true),
+	T: (path, data) => path[add](Quadratic, [data, true], true),
+	a: (path, data) => path[add](Arc, [data]),
+	A: (path, data) => path[add](Arc, [data, true]),
 	z: (path) => path.close(),
 	Z: (path) => path.close(true)
 };
@@ -56,7 +56,9 @@ const coordinatesTo = {
 		settings.offset = undefined;
 		const relative = coordinatesTo.relative(command, settings, nextCommands);
 
-		return absolute.length < relative.length ? absolute : relative;
+		command.isExportedAbsolute = absolute.length <= relative.length;
+
+		return command.isExportedAbsolute ? absolute : relative;
 	}
 };
 
@@ -192,22 +194,25 @@ export default class Path {
 		return this;
 	}
 
-	[add](Command, args) {
-		const previous = this[PATH][this[PATH].length - 1];
+	[add](Command, args, isShorthand = false) {
 		let isAbsolute = false;
 
 		if (args !== undefined && isBoolean(args[args.length - 1])) {
 			isAbsolute = args.pop();
 		}
 
-		const command = new Command(args, previous, this[END_OF_PATH], isAbsolute);
+		Command.split(args, isShorthand)
+			.forEach((arg) => {
+				const previous = this[PATH][this[PATH].length - 1];
+				const command = new Command(arg, previous, this[END_OF_PATH], isAbsolute);
 
-		this[PATH].push(command);
-		this[END_OF_PATH] = command.position(this[END_OF_PATH], this[SUB_PATH_START]);
+				this[PATH].push(command);
+				this[END_OF_PATH] = command.position(this[END_OF_PATH], this[SUB_PATH_START]);
 
-		if (command instanceof Move) {
-			this[SUB_PATH_START] = this[END_OF_PATH];
-		}
+				if (command instanceof Move) {
+					this[SUB_PATH_START] = this[END_OF_PATH];
+				}
+			});
 
 		return this;
 	}

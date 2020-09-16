@@ -5,16 +5,35 @@ import Command from './Command.js';
 export const DATA = Symbol();
 
 export default class Arc extends Command {
-	set(args) {
+	static split(args) {
+		return Arc.parseArgs(args);
+	}
+
+	static parseArgs(args, isSet = false) {
+		if (args[0] instanceof Point) {
+			return args;
+		}
+
+		const size = 7;
+		const output = [];
+
 		args = Arc.clean(args[0], [3, 4], 7);
 
-		this[DATA] = [
-			new Point(args[0], args[1]),
-			args[2],
-			args[3],
-			args[4],
-			new Point(args[5], args[6])
-		];
+		for (let i = size; i <= args.length; i += size) {
+			output.push([
+				new Point(args[i - 7], args[i - 6]),
+				parseInt(args[i - 5], 10),
+				parseInt(args[i - 4], 10),
+				parseInt(args[i - 3], 10),
+				new Point(args[i - 2], args[i - 1])
+			]);
+		}
+
+		return isSet ? output[0] : output;
+	}
+
+	set(args) {
+		this[DATA] = Arc.parseArgs(args, true);
 	}
 
 	position(currentPoint) {
@@ -36,7 +55,9 @@ export default class Arc extends Command {
 		let result = '';
 
 		if (!settings.toPolygon) {
-			result = Arc.label('A', 'a', settings) +
+			this.isExportedAbsolute = settings.toAbsolute;
+
+			result = Arc.label('A', 'a', settings, this) +
 				Arc.pointToString(radius, {
 					...settings,
 					currentPoint: origin

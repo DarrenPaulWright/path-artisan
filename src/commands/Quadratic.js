@@ -1,7 +1,12 @@
 import { isArray } from 'type-enforcer-math';
+import Command from './Command.js';
 import Cubic, { DATA } from './Cubic.js';
 
 export default class Quadratic extends Cubic {
+	static split(args, isShorthand) {
+		return Command.split(args, isShorthand ? 1 : 2);
+	}
+
 	set(args, previous, currentPoint) {
 		this[DATA] = Quadratic.parseArgs(args);
 
@@ -25,11 +30,15 @@ export default class Quadratic extends Cubic {
 		let result = '';
 
 		if (!settings.toPolygon) {
+			this.isExportedAbsolute = settings.toAbsolute;
+
 			if (this.isShorthand(settings, control)) {
-				result = Quadratic.label('T', 't', settings);
+				this.isExportedShorthand = true;
+				result = Quadratic.label('T', 't', settings, this);
 			}
 			else {
-				result = Quadratic.label('Q', 'q', settings) +
+				this.isExportedShorthand = false;
+				result = Quadratic.label('Q', 'q', settings, this) +
 					Quadratic.pointToString(control, settings);
 			}
 		}

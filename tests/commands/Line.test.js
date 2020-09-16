@@ -25,6 +25,24 @@ describe('Line', () => {
 		assert.is(line.export(settings, []), 'l 3,4');
 	});
 
+	describe('.split', () => {
+		it('should return an empty array when an empty string is provided', () => {
+			assert.equal(Line.split(['']), []);
+		});
+
+		it('should return a Point when one point is provided', () => {
+			assert.equal(Line.split(['1,2']), [[new Point(1, 2)]]);
+		});
+
+		it('should return multiple Points when multiple are provided', () => {
+			assert.equal(Line.split(['1,2 3,4 5,6']), [
+				[new Point(1, 2)],
+				[new Point(3, 4)],
+				[new Point(5, 6)]
+			]);
+		});
+	});
+
 	describe('shorthand', () => {
 		describe('toAbsolute', () => {
 			it('should convert a horizontal line', () => {

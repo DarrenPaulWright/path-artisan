@@ -3,6 +3,10 @@ import Command from './Command.js';
 const POINT = Symbol();
 
 export default class Move extends Command {
+	static split(args) {
+		return Command.split(args, 1);
+	}
+
 	set(args) {
 		this[POINT] = Move.parseArgs(args);
 	}

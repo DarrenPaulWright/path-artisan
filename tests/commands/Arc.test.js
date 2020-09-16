@@ -5,6 +5,35 @@ import Arc from '../../src/commands/Arc.js';
 describe('Arc', () => {
 	const currentPoint = Object.freeze(new Point(10, 10));
 
+	describe('.split', () => {
+		it('should return an empty array when an empty string is provided', () => {
+			assert.equal(Arc.split(['']), []);
+		});
+
+		it('should return an empty array when one point is provided', () => {
+			assert.equal(Arc.split(['1,2']), []);
+		});
+
+		it('should return 2 points when 2 points are provided', () => {
+			assert.equal(Arc.split(['10,10 0 0 0 5,6']), [
+				[new Point(10, 10), 0, 0, 0, new Point(5, 6)]
+			]);
+		});
+
+		it('should return multiple Points when multiple are provided', () => {
+			assert.equal(Arc.split(['10,10 0 0 0 5,6 10,10 0 0 0 5,6']), [
+				[new Point(10, 10), 0, 0, 0, new Point(5, 6)],
+				[new Point(10, 10), 0, 0, 0, new Point(5, 6)]
+			]);
+		});
+
+		it('should handle compressed data', () => {
+			assert.equal(Arc.split(['10,10 0 005,6']), [
+				[new Point(10, 10), 0, 0, 0, new Point(5, 6)]
+			]);
+		});
+	});
+
 	describe('export', () => {
 		describe('toAbsolute', () => {
 			let settings = {};

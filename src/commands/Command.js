@@ -12,6 +12,25 @@ export default class Command {
 		this.set(args, previous, currentPoint);
 	}
 
+	static split(args, size) {
+		args = Command.parseArgs(args);
+
+		if (isArray(args)) {
+			const output = [];
+
+			for (let i = size; i <= args.length; i += size) {
+				output.push(args.slice(i - size, i));
+			}
+
+			return output;
+		}
+		else if (size === 1) {
+			return [[args]];
+		}
+
+		return [];
+	}
+
 	static parseArgs(args) {
 		if (args.length === 1) {
 			if (args[0] instanceof Point) {
@@ -22,6 +41,9 @@ export default class Command {
 			}
 
 			return Command.toPoints(Command.clean(args[0]));
+		}
+		else if (args[0] instanceof Point) {
+			return args;
 		}
 
 		return new Point(...args);
@@ -90,14 +112,38 @@ export default class Command {
 		return true;
 	}
 
-	static label(absoluteLabel, relativeLabel, settings) {
+	static isConsecutive(previous, current) {
+		if (current === undefined || previous === undefined) {
+			return false;
+		}
+
+		if (!(previous instanceof current.constructor)) {
+			return false;
+		}
+
+		if (previous.isExportedAbsolute !== current.isExportedAbsolute) {
+			return false;
+		}
+
+		return previous.isExportedShorthand === current.isExportedShorthand;
+	}
+
+	static label(absoluteLabel, relativeLabel, settings, command) {
 		let output = settings.commandsOnNewLines ? '\n' : '';
+		const isConsecutive = Command.isConsecutive(settings.previous, command);
 
 		if (!settings.toPolygon) {
-			output += (settings.toAbsolute ? absoluteLabel : relativeLabel);
+			if (isConsecutive) {
+				if (settings.compress) {
+					output += ',';
+				}
+			}
+			else {
+				output += (settings.toAbsolute ? absoluteLabel : relativeLabel);
 
-			if (settings.compress !== true) {
-				output += ' ';
+				if (settings.compress !== true) {
+					output += ' ';
+				}
 			}
 		}
 
