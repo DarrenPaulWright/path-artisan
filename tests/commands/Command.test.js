@@ -49,6 +49,10 @@ describe('Command', () => {
 			assert.equal(Command.clean('123.456-0.6'), ['123.456', '-0.6']);
 		});
 
+		it('should handle compressed fraction digits', () => {
+			assert.equal(Command.clean('123.456.6-13'), ['123.456', '.6', '-13']);
+		});
+
 		it('should ignore returns', () => {
 			assert.equal(Command.clean('1,\r-2'), ['1', '-2']);
 		});
@@ -68,8 +72,8 @@ describe('Command', () => {
 		});
 
 		it('should parse mulitple points', () => {
-			assert.equal(Command.parseArgs([' 1,2-3-4   5-9 ']), [new Point(1, 2),
-				new Point(-3, -4),
+			assert.equal(Command.parseArgs([' 1.9,2.123-3.5-4.75   5-9 ']), [new Point(1.9, 2.123),
+				new Point(-3.5, -4.75),
 				new Point(5, -9)]);
 		});
 	});

@@ -27,17 +27,24 @@ export default class Command {
 		return new Point(...args);
 	}
 
-	static clean(string) {
+	static clean(string, singleValues, length = 1) {
 		const output = [];
-		let start = -1;
+		let start = 0;
 		let i = 0;
+		let hasDecimal = false;
 
 		while (i < string.length) {
 			if (!isWhiteSpace(string[i]) || string[i] === '-') {
+				const position = output.length % length;
+
 				start = i++;
-				while (!isWhiteSpace(string[i])) {
-					i++;
+				if (!singleValues || !singleValues.includes(position)) {
+					while (!isWhiteSpace(string[i]) && (!hasDecimal || string[i] !== '.')) {
+						hasDecimal = hasDecimal || string[i] === '.';
+						i++;
+					}
 				}
+				hasDecimal = false;
 				output.push(string.slice(start, i));
 			}
 			else {

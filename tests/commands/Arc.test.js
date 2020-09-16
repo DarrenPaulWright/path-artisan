@@ -17,7 +17,7 @@ describe('Arc', () => {
 			});
 
 			it('should convert from relative', () => {
-				const arc = new Arc(['10,10 0 0 0 5,6']);
+				const arc = new Arc(['10,10 0 005,6']);
 
 				assert.equal(arc.export(settings, []), 'A 10,10 0 0 0 15,16');
 				assert.equal(settings.currentPoint, new Point(15, 16));

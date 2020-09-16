@@ -6,7 +6,7 @@ export const DATA = Symbol();
 
 export default class Arc extends Command {
 	set(args) {
-		args = Arc.clean(args[0]);
+		args = Arc.clean(args[0], [3, 4], 7);
 
 		this[DATA] = [
 			new Point(args[0], args[1]),
