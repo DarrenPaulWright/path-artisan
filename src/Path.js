@@ -54,9 +54,14 @@ const coordinatesTo = {
 		const absolute = coordinatesTo.absolute(command, settings, nextCommands.slice());
 		settings.currentPoint = currentPoint;
 		settings.offset = undefined;
+		const absoluteIsConsecutive = settings.isConsecutive;
 		const relative = coordinatesTo.relative(command, settings, nextCommands);
 
-		command.isExportedAbsolute = absolute.length <= relative.length;
+		command.isExportedAbsolute = absolute.trim().length <= relative.trim().length;
+
+		if (command.isExportedAbsolute) {
+			settings.isConsecutive = absoluteIsConsecutive;
+		}
 
 		return command.isExportedAbsolute ? absolute : relative;
 	}
@@ -194,17 +199,17 @@ export default class Path {
 		return this;
 	}
 
-	[add](Command, args, isShorthand = false) {
+	[add](ThisCommand, args, isShorthand = false) {
 		let isAbsolute = false;
 
 		if (args !== undefined && isBoolean(args[args.length - 1])) {
 			isAbsolute = args.pop();
 		}
 
-		Command.split(args, isShorthand)
+		ThisCommand.split(args, isShorthand)
 			.forEach((arg) => {
 				const previous = this[PATH][this[PATH].length - 1];
-				const command = new Command(arg, previous, this[END_OF_PATH], isAbsolute);
+				const command = new ThisCommand(arg, previous, this[END_OF_PATH], isAbsolute);
 
 				this[PATH].push(command);
 				this[END_OF_PATH] = command.position(this[END_OF_PATH], this[SUB_PATH_START]);
@@ -439,6 +444,8 @@ export default class Path {
 					settings.compress !== true &&
 					commandResult !== '' &&
 					output !== '' &&
+					!settings.isConsecutive &&
+					!settings.toPolygon &&
 					output.charAt(output.length - 1) !== ' '
 				) {
 					output += ' ';
@@ -447,6 +454,7 @@ export default class Path {
 				output += commandResult;
 
 				settings.previous = command;
+				settings.isConsecutive = false;
 			}
 
 			return nextCommands.length === 0;

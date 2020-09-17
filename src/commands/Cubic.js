@@ -69,21 +69,21 @@ export default class Cubic extends Command {
 
 		if (!settings.toPolygon) {
 			this.isExportedAbsolute = settings.toAbsolute;
-			
+
 			if (this.isShorthand(settings, control1)) {
-				this.isExportedShorthand = true;
-				result = Cubic.label('S', 's', settings, this) +
+				this.setExportShorthand(true, settings);
+				result = Cubic.label('S', 's', settings) +
 					Cubic.pointToString(control2, settings);
 			}
 			else {
-				this.isExportedShorthand = false;
-				result = Cubic.label('C', 'c', settings, this) +
+				this.setExportShorthand(false, settings);
+				result = Cubic.label('C', 'c', settings) +
 					Cubic.pointToString(control1, settings) +
-					Cubic.pointToString(control2, settings, true);
+					Cubic.pointToString(control2, settings);
 			}
 		}
 
-		result += Cubic.pointToString(point, settings, !settings.toPolygon);
+		result += Cubic.pointToString(point, settings);
 
 		settings.currentPoint = point;
 

@@ -9,7 +9,7 @@ describe('Close', () => {
 			toAbsolute: false
 		};
 
-		assert.is(line.export(settings, []), 'z ');
+		assert.is(line.export(settings, []), 'z');
 	});
 
 	it('should parse initial numbers', () => {
@@ -18,7 +18,7 @@ describe('Close', () => {
 			toAbsolute: false
 		};
 
-		assert.is(line.export(settings, []), 'z ');
+		assert.is(line.export(settings, []), 'z');
 	});
 
 	describe('.split', () => {
@@ -44,7 +44,7 @@ describe('Close', () => {
 				subPathStart: new Point(10, 12)
 			};
 
-			assert.equal(line.export(settings, nextCommands), 'Z ');
+			assert.equal(line.export(settings, nextCommands), 'Z');
 			assert.equal(settings.currentPoint, new Point(10, 12));
 			assert.equal(nextCommands.length, 0);
 		});
@@ -59,7 +59,7 @@ describe('Close', () => {
 				subPathStart: new Point(10, 12)
 			};
 
-			assert.equal(line.export(settings, nextCommands), 'z ');
+			assert.equal(line.export(settings, nextCommands), 'z');
 			assert.equal(settings.currentPoint, new Point(10, 12));
 			assert.equal(nextCommands.length, 0);
 		});

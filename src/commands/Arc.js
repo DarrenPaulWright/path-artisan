@@ -1,4 +1,4 @@
-import { Point } from 'type-enforcer-math';
+import { Point, round } from 'type-enforcer-math';
 import origin from '../utility/origin.js';
 import Command from './Command.js';
 
@@ -22,7 +22,7 @@ export default class Arc extends Command {
 		for (let i = size; i <= args.length; i += size) {
 			output.push([
 				new Point(args[i - 7], args[i - 6]),
-				parseInt(args[i - 5], 10),
+				parseFloat(args[i - 5]),
 				parseInt(args[i - 4], 10),
 				parseInt(args[i - 3], 10),
 				new Point(args[i - 2], args[i - 1])
@@ -56,18 +56,23 @@ export default class Arc extends Command {
 
 		if (!settings.toPolygon) {
 			this.isExportedAbsolute = settings.toAbsolute;
+			this.setExportShorthand(false, settings);
 
-			result = Arc.label('A', 'a', settings, this) +
+			result = Arc.label('A', 'a', settings) +
 				Arc.pointToString(radius, {
 					...settings,
 					currentPoint: origin
 				}) +
-				Arc.numberToString(this[DATA][1], settings) +
-				Arc.numberToString(this[DATA][2], settings) +
+				Arc.numberToString(
+					round(this[DATA][1], settings.fractionDigits),
+					settings,
+					settings.compress
+				) +
+				Arc.numberToString(this[DATA][2], settings, settings.compress) +
 				Arc.numberToString(this[DATA][3], settings);
 		}
 
-		result += Arc.pointToString(point, settings, !settings.toPolygon);
+		result += Arc.pointToString(point, settings);
 
 		settings.currentPoint = point;
 

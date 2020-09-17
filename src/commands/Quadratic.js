@@ -33,12 +33,12 @@ export default class Quadratic extends Cubic {
 			this.isExportedAbsolute = settings.toAbsolute;
 
 			if (this.isShorthand(settings, control)) {
-				this.isExportedShorthand = true;
-				result = Quadratic.label('T', 't', settings, this);
+				this.setExportShorthand(true, settings);
+				result = Quadratic.label('T', 't', settings);
 			}
 			else {
-				this.isExportedShorthand = false;
-				result = Quadratic.label('Q', 'q', settings, this) +
+				this.setExportShorthand(false, settings);
+				result = Quadratic.label('Q', 'q', settings) +
 					Quadratic.pointToString(control, settings);
 			}
 		}

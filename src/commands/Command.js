@@ -113,7 +113,7 @@ export default class Command {
 	}
 
 	static isConsecutive(previous, current) {
-		if (current === undefined || previous === undefined) {
+		if (previous === undefined) {
 			return false;
 		}
 
@@ -128,23 +128,11 @@ export default class Command {
 		return previous.isExportedShorthand === current.isExportedShorthand;
 	}
 
-	static label(absoluteLabel, relativeLabel, settings, command) {
+	static label(absoluteLabel, relativeLabel, settings) {
 		let output = settings.commandsOnNewLines ? '\n' : '';
-		const isConsecutive = Command.isConsecutive(settings.previous, command);
 
-		if (!settings.toPolygon) {
-			if (isConsecutive) {
-				if (settings.compress) {
-					output += ',';
-				}
-			}
-			else {
-				output += (settings.toAbsolute ? absoluteLabel : relativeLabel);
-
-				if (settings.compress !== true) {
-					output += ' ';
-				}
-			}
+		if (!settings.toPolygon && !settings.isConsecutive) {
+			output += (settings.toAbsolute ? absoluteLabel : relativeLabel);
 		}
 
 		return output;
@@ -174,17 +162,40 @@ export default class Command {
 		return point;
 	}
 
-	static pointToString(point, settings, followsPoint = false) {
+	static pointToString(point, settings) {
+		const compress = settings.compress && settings.isConsecutive && !settings.toPolygon;
+
 		point = Command.transform(point, settings);
 
-		return ((followsPoint === false || (settings.compress === true && point.x < 0)) ? '' : ' ') +
-			point.x +
-			(settings.compress === true && point.y < 0 ? '' : ',') +
-			point.y;
+		return Command.numberToString(point.x, settings, compress) +
+			Command.numberToString(point.y, settings, true);
 	}
 
-	static numberToString(number, settings) {
-		return ((settings.compress === true && number < 0) ? '' : ' ') + number;
+	static numberToString(number, settings, isY = false) {
+		const isFraction = number > 0 && number < 1;
+		const isNegative = number < 0;
+		let output = '';
+
+		if (isY) {
+			if (settings.compress !== true || !(isNegative || isFraction)) {
+				output += ',';
+			}
+		}
+		else if (settings.compress !== true) {
+			output += ' ';
+		}
+
+		if (number === 0) {
+			output += '0';
+		}
+		else if (settings.compress === true) {
+			output += (number + '').replace(/^0+/u, '');
+		}
+		else {
+			output += number;
+		}
+
+		return output;
 	}
 
 	set() {
@@ -255,5 +266,10 @@ export default class Command {
 		callback(point, false, index);
 
 		settings.currentPoint = point;
+	}
+
+	setExportShorthand(isShorthand, settings) {
+		this.isExportedShorthand = isShorthand;
+		settings.isConsecutive = Command.isConsecutive(settings.previous, this);
 	}
 }

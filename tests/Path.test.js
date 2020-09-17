@@ -434,6 +434,17 @@ describe('Path', () => {
 				});
 		});
 
+		it('should remove whitespace around fractions when compress = true', () => {
+			return new Path('M -500,-600 L7,8.2 L0.5,0.78 z')
+				.export({
+					coordinates: 'auto',
+					compress: true
+				})
+				.then((path) => {
+					assert.is(path, 'M-500-600L7,8.2.5.78Z');
+				});
+		});
+
 		it('should add newlines before each command when commandsOnNewLines = true', () => {
 			return new Path('m 5,6 L10,12 l10,12 zM -500,-600 L7,8 l10,12 z')
 				.export({

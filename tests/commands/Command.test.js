@@ -1,3 +1,4 @@
+import displayValue from 'display-value';
 import { assert } from 'type-enforcer';
 import { Point } from 'type-enforcer-math';
 import Command from '../../src/commands/Command.js';
@@ -78,9 +79,9 @@ describe('Command', () => {
 		});
 	});
 
-	describe('label', () => {
+	describe('.label', () => {
 		it('should add a space at the end', () => {
-			assert.is(Command.label('Z', 'z', {}), 'z ');
+			assert.is(Command.label('Z', 'z', {}), 'z');
 		});
 
 		it('should not add a space at the end if compress = true', () => {
@@ -88,7 +89,7 @@ describe('Command', () => {
 		});
 
 		it('should add a newline if commandsOnNewLines = true', () => {
-			assert.is(Command.label('Z', 'z', { commandsOnNewLines: true }), '\nz ');
+			assert.is(Command.label('Z', 'z', { commandsOnNewLines: true }), '\nz');
 		});
 
 		it('should do both', () => {
@@ -100,11 +101,11 @@ describe('Command', () => {
 		const currentPoint = new Point();
 
 		it('should process a point without settings', () => {
-			assert.equal(Command.pointToString(new Point(1, 2), { currentPoint }), '1,2');
+			assert.equal(Command.pointToString(new Point(1, 2), { currentPoint }), ' 1,2');
 		});
 
 		it('should have a comma when y is negative and compress is not set', () => {
-			assert.equal(Command.pointToString(new Point(1, -2), { currentPoint }), '1,-2');
+			assert.equal(Command.pointToString(new Point(1, -2), { currentPoint }), ' 1,-2');
 		});
 
 		it('should remove the comma when y is negative and compress=true', () => {
@@ -112,14 +113,14 @@ describe('Command', () => {
 		});
 
 		it('should not round if fractionDigits is not set', () => {
-			assert.equal(Command.pointToString(new Point(1.123, -2.456), { currentPoint }), '1.123,-2.456');
+			assert.equal(Command.pointToString(new Point(1.123, -2.456), { currentPoint }), ' 1.123,-2.456');
 		});
 
 		it('should round if fractionDigits is set', () => {
 			const point = new Point(1.123, -2.456);
 			const output = point.clone();
 
-			assert.equal(Command.pointToString(point, { fractionDigits: 2, currentPoint }), '1.12,-2.46');
+			assert.equal(Command.pointToString(point, { fractionDigits: 2, currentPoint }), ' 1.12,-2.46');
 			assert.equal(point, output);
 		});
 
@@ -131,7 +132,7 @@ describe('Command', () => {
 				scale: { x: 1.5, y: 2 },
 				fractionDigits: 2,
 				currentPoint
-			}), '1.68,-4.91');
+			}), ' 1.68,-4.91');
 			assert.equal(point, output);
 		});
 
@@ -143,7 +144,7 @@ describe('Command', () => {
 				translate: { x: 1.5, y: 2 },
 				fractionDigits: 2,
 				currentPoint
-			}), '2.62,-0.46');
+			}), ' 2.62,-0.46');
 			assert.equal(point, output);
 		});
 
@@ -161,7 +162,7 @@ describe('Command', () => {
 			assert.equal(point, output);
 		});
 
-		it('should add a space at the beginning if followsPoint is true', () => {
+		it('should add a comma at the beginning if followsPoint=true and compress=true', () => {
 			const point = new Point(10, -10);
 			const output = point.clone();
 
@@ -170,9 +171,94 @@ describe('Command', () => {
 				scale: { x: 2, y: 4 },
 				fractionDigits: 2,
 				compress: true,
+				isConsecutive: true,
 				currentPoint
-			}, true), ' 30-60');
+			}), ',30-60');
 			assert.equal(point, output);
+		});
+
+		it('should not add a comma at the beginning if followsPoint=true and compress=true and x is a fraction', () => {
+			const point = new Point(0.23, -10);
+			const output = point.clone();
+
+			assert.equal(Command.pointToString(point, {
+				scale: { x: 2, y: 4 },
+				fractionDigits: 2,
+				compress: true,
+				currentPoint
+			}), '.46-40');
+			assert.equal(point, output);
+		});
+
+		it('should not add a comma at the beginning if followsPoint=true and compress=true and x is negative', () => {
+			const point = new Point(-23, -10);
+			const output = point.clone();
+
+			assert.equal(Command.pointToString(point, {
+				scale: { x: 2, y: 4 },
+				fractionDigits: 2,
+				compress: true,
+				currentPoint
+			}), '-46-40');
+			assert.equal(point, output);
+		});
+	});
+
+	describe('.numberToString', () => {
+		const values = [{
+			number: 0,
+			compressTrue: '0',
+			compressFalse: ' 0',
+			yCompressTrue: ',0',
+			yCompressFalse: ',0'
+		}, {
+			number: -1,
+			compressTrue: '-1',
+			compressFalse: ' -1',
+			yCompressTrue: '-1',
+			yCompressFalse: ',-1'
+		}, {
+			number: 1,
+			compressTrue: '1',
+			compressFalse: ' 1',
+			yCompressTrue: ',1',
+			yCompressFalse: ',1'
+		}, {
+			number: 20.23,
+			compressTrue: '20.23',
+			compressFalse: ' 20.23',
+			yCompressTrue: ',20.23',
+			yCompressFalse: ',20.23'
+		}, {
+			number: 0.23,
+			compressTrue: '.23',
+			compressFalse: ' 0.23',
+			yCompressTrue: '.23',
+			yCompressFalse: ',0.23'
+		}];
+
+		values.forEach((data) => {
+			describe(`when given ${displayValue(data.number)}`, () => {
+				it(`should return ${displayValue(data.compressTrue)} when compress=true`, () => {
+					const result = Command.numberToString(data.number, { compress: true });
+					assert.equal(result, data.compressTrue);
+				});
+
+				it(`should return ${displayValue(data.compressFalse)} when compress=false`, () => {
+					const result = Command.numberToString(data.number, { compress: false });
+					assert.equal(result, data.compressFalse);
+				});
+
+				it(`should return ${displayValue(data.yCompressTrue)} when compress=true and isY=true`, () => {
+					const result = Command.numberToString(data.number, { compress: true }, true);
+					assert.equal(result, data.yCompressTrue);
+				});
+
+				it(`should return ${displayValue(data.yCompressFalse)} when compress=false and isY=true`, () => {
+					const result = Command.numberToString(data.number, { compress: false }, true);
+					assert.equal(result, data.yCompressFalse);
+				});
+			});
 		});
 	});
 

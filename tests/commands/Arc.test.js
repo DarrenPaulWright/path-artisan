@@ -84,5 +84,54 @@ describe('Arc', () => {
 				assert.equal(settings.currentPoint, new Point(15, 16));
 			});
 		});
+
+		it('should remove whitespace when compress=true and angle is negative', () => {
+			const arc = new Arc(['10,10 -45 005,6']);
+			const settings = {
+				toAbsolute: true,
+				compress: true,
+				currentPoint
+			};
+
+			assert.equal(arc.export(settings, []), 'A10,10-45,0015,16');
+			assert.equal(settings.currentPoint, new Point(15, 16));
+		});
+
+		it('should remove whitespace when compress=true and angle is a fraction', () => {
+			const arc = new Arc(['10,10 0.45 005,6']);
+			const settings = {
+				toAbsolute: true,
+				compress: true,
+				fractionDigits: 1,
+				currentPoint
+			};
+
+			assert.equal(arc.export(settings, []), 'A10,10.5,0015,16');
+			assert.equal(settings.currentPoint, new Point(15, 16));
+		});
+
+		it('should not remove whitespace when compress=true and angle is positive', () => {
+			const arc = new Arc(['10,10 45 005,6']);
+			const settings = {
+				toAbsolute: true,
+				compress: true,
+				currentPoint
+			};
+
+			assert.equal(arc.export(settings, []), 'A10,10,45,0015,16');
+			assert.equal(settings.currentPoint, new Point(15, 16));
+		});
+
+		it('should not remove whitespace when compress=true and angle is 0', () => {
+			const arc = new Arc(['10,10 0 005,6']);
+			const settings = {
+				toAbsolute: true,
+				compress: true,
+				currentPoint
+			};
+
+			assert.equal(arc.export(settings, []), 'A10,10,0,0015,16');
+			assert.equal(settings.currentPoint, new Point(15, 16));
+		});
 	});
 });
