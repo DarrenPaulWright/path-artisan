@@ -76,7 +76,7 @@
 		"update-clean": "npm run pre-clean && npm run update",
 		"update-commit": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\"",
 		"update-patch": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\" && npm version patch",
-		"docs:readme": "jsdoc2md src/Path.js > README.md -t node_modules/dmd-readable/docs.hbs --plugin dmd-readable",
+		"docs:readme": "jsdoc2md src/optimizeSvgPaths.js src/Path.js > README.md -t node_modules/dmd-readable/docs.hbs --plugin dmd-readable",
 		"docs": "run-p docs:*"
 	},
 	"dependencies": {

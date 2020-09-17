@@ -107,7 +107,6 @@ const processTransformSettings = (settings) => {
 			}
 		}
 	});
-
 };
 
 const syncUntil = (callback) => new Promise((resolve) => {
@@ -165,7 +164,7 @@ export default class Path {
 	}
 
 	/**
-	 * Import a path string.
+	 * Import a path string. Removes any previous commands and create a new one.
 	 *
 	 * @memberOf Path
 	 * @instance
@@ -245,7 +244,7 @@ export default class Path {
 	 * @instance
 	 * @chainable
 	 *
-	 * @param {...number} args - X and y coordinates.
+	 * @param {...*} args - X and y coordinates or a string of X and y coordinates. If the final argument is `true` then command will be absolute coordinates.
 	 *
 	 * @returns {object} Returns this.
 	 */
@@ -260,7 +259,7 @@ export default class Path {
 	 * @instance
 	 * @chainable
 	 *
-	 * @param {...number} args - X and y coordinates.
+	 * @param {...*} args - X and y coordinates or a string of X and y coordinates. If the final argument is `true` then command will be absolute coordinates.
 	 *
 	 * @returns {object} Returns this.
 	 */
@@ -275,7 +274,7 @@ export default class Path {
 	 * @instance
 	 * @chainable
 	 *
-	 * @param {...number} args - Series of coordinates.
+	 * @param {...*} args - Series of coordinates or a string of coordinates. If the final argument is `true` then command will be absolute coordinates.
 	 *
 	 * @returns {object} Returns this.
 	 */
@@ -290,7 +289,7 @@ export default class Path {
 	 * @instance
 	 * @chainable
 	 *
-	 * @param {...number} args - Series of coordinates.
+	 * @param {...*} args - Series of coordinates or a string of coordinates. If the final argument is `true` then command will be absolute coordinates.
 	 *
 	 * @returns {object} Returns this.
 	 */
@@ -305,7 +304,7 @@ export default class Path {
 	 * @instance
 	 * @chainable
 	 *
-	 * @param {...number} args - Series of coordinates / values.
+	 * @param {...*} args - Series of coordinates / values or a string of coordinates / values. If the final argument is `true` then command will be absolute coordinates.
 	 *
 	 * @returns {object} Returns this.
 	 */
@@ -320,7 +319,7 @@ export default class Path {
 	 * @instance
 	 * @chainable
 	 *
-	 * @param {...number} args - Move to coordinates.
+	 * @param {boolean} [args=false] - If the argument is `true` then command will be absolute coordinates.
 	 *
 	 * @returns {object} Returns this.
 	 */
@@ -407,21 +406,21 @@ export default class Path {
 	}
 
 	/**
-	 * Export a string of the path.
+	 * Export a string of the path. Transforms are only applied to the exported path.
 	 *
 	 * @memberOf Path
 	 * @instance
 	 *
 	 * @param {object} [settings] - Optional settings object.
 	 * @param {string} [settings.coordinates=initial] - Can be 'absolute' to convert all coordinates to absolute, 'relative' to convert all coordinates to relative, 'auto' to convert coordinates to whichever is the fewest characters, 'initial' (default) to retain the coordinates set on each command.
-	 * @param {boolean} [settings.compress] - Remove excess whitespace and unnecessary characters.
+	 * @param {boolean} [settings.compress=false] - Remove excess whitespace and unnecessary characters.
 	 * @param {boolean} [settings.combine=true] - Combine consecutive commands that are redundant.
 	 * @param {integer} [settings.fractionDigits=3] - Round all numbers in path to a specified number of fraction digits.
 	 * @param {number|Point|Array|object} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point, an array as [x, y], or an object as { x:_, y:_ }.
 	 * @param {number|Point|Array|object} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point, an array as [x, y], or an object as { x:_, y:_ }.
 	 * @param {integer} [settings.maxCharsPerLine] - Add newlines at logical breaks in the path to improve readability.
 	 * @param {boolean} [settings.commandsOnNewLines=false] - Add a newline between each command.
-	 * @param {boolean} [settings.toPolygon] - Format the string for use in a polygon element. Sets coordinates to 'absolute'.
+	 * @param {boolean} [settings.toPolygon=false] - Format the string for use in a polygon element. Sets coordinates to 'absolute'.
 	 * @param {boolean} [settings.async=false] - Process each command in a separate Promise.
 	 *
 	 * @returns {Promise<string>}
@@ -442,6 +441,7 @@ export default class Path {
 			coordinates: 'initial',
 			combine: true,
 			fractionDigits: 3,
+			compress: false,
 			toPolygon: false,
 			...settings,
 			currentPoint: origin,
