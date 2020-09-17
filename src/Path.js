@@ -1,6 +1,6 @@
 import { until as asyncUntil } from 'async-agent';
 import { Schema } from 'hord';
-import { Enum, isBoolean, isString } from 'type-enforcer';
+import { Enum, isBoolean, isNumber, isString } from 'type-enforcer';
 import { Point } from 'type-enforcer-math';
 import Arc from './commands/Arc.js';
 import Close from './commands/Close.js';
@@ -83,8 +83,8 @@ const exportSettingsSchema = new Schema({
 		type: 'integer',
 		min: 0
 	},
-	scale: [Point, Object, Array],
-	translate: [Point, Object, Array],
+	scale: [Point, Object, Array, Number],
+	translate: [Point, Object, Array, Number],
 	maxCharsPerLine: {
 		type: 'integer',
 		min: 1
@@ -93,6 +93,22 @@ const exportSettingsSchema = new Schema({
 	toPolygon: Boolean,
 	async: Boolean
 });
+
+const processTransformSettings = (settings) => {
+	['scale', 'translate'].forEach((setting) => {
+		const value = settings[setting];
+
+		if (value !== undefined && !(value instanceof Point)) {
+			if (isNumber(value)) {
+				settings[setting] = new Point(value, value);
+			}
+			else {
+				settings[setting] = new Point(value);
+			}
+		}
+	});
+
+};
 
 const syncUntil = (callback) => new Promise((resolve) => {
 	let result = false;
@@ -365,8 +381,8 @@ export default class Path {
 	 *
 	 * @param {object} [settings] - Optional settings object.
 	 * @param {integer} [settings.fractionDigits=3] - Round all numbers in path to a specified number of fraction digits.
-	 * @param {number|Point} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point.
-	 * @param {number|Point} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point.
+	 * @param {number|Point|Array|object} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point, an array as [x, y], or an object as { x:_, y:_ }.
+	 * @param {number|Point|Array|object} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point, an array as [x, y], or an object as { x:_, y:_ }.
 	 *
 	 * @returns {object} Returns this.
 	 */
@@ -375,6 +391,8 @@ export default class Path {
 			...settings,
 			toAbsolute: true
 		};
+
+		processTransformSettings(settings);
 
 		this[PATH].forEach((command) => {
 			command.transform(settings);
@@ -394,10 +412,10 @@ export default class Path {
 	 * @param {boolean} [settings.compress] - Remove excess whitespace and unnecessary characters.
 	 * @param {boolean} [settings.combine=true] - Combine consecutive commands that are redundant.
 	 * @param {integer} [settings.fractionDigits=3] - Round all numbers in path to a specified number of fraction digits.
-	 * @param {number|Point} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point.
-	 * @param {number|Point} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point.
-	 * @param {number|Point} [settings.maxCharsPerLine] - Add newlines at logical breaks in the path to improve readability.
-	 * @param {number|Point} [settings.commandsOnNewLines] - Add a newline between each command.
+	 * @param {number|Point|Array|object} [settings.scale] - Scale the entire path. If a number is provided then x and y are scaled the same. To scale x and y differently provide a Point, an array as [x, y], or an object as { x:_, y:_ }.
+	 * @param {number|Point|Array|object} [settings.translate] - Translate the entire string a specified distance. If a number is provided then x and y are translated the same. To translated x and y differently provide a Point, an array as [x, y], or an object as { x:_, y:_ }.
+	 * @param {integer} [settings.maxCharsPerLine] - Add newlines at logical breaks in the path to improve readability.
+	 * @param {boolean} [settings.commandsOnNewLines=false] - Add a newline between each command.
 	 * @param {boolean} [settings.toPolygon] - Format the string for use in a polygon element. Sets coordinates to 'absolute'.
 	 * @param {boolean} [settings.async=false] - Process each command in a separate Promise.
 	 *
@@ -424,6 +442,8 @@ export default class Path {
 			currentPoint: origin,
 			subPathStart: 0
 		};
+
+		processTransformSettings(settings);
 
 		if (settings.toPolygon) {
 			settings.coordinates = 'absolute';

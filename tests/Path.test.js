@@ -285,7 +285,11 @@ describe('Path', () => {
 
 		it('should transform a move', () => {
 			return new Path('M 2.47,2.47 m 1.123,1.123 z')
-				.transform(transformSettings)
+				.transform({
+					translate: 10,
+					scale: 2,
+					fractionDigits: 1
+				})
 				.export(exportSettings)
 				.then((result) => {
 					assert.is(result, 'M 24.9,24.9 m 22.2,22.2 z');
@@ -294,7 +298,11 @@ describe('Path', () => {
 
 		it('should transform a line', () => {
 			return new Path('m 1.123,1.123 L 4.123,4.123 l 5.72,5.72 z')
-				.transform(transformSettings)
+				.transform({
+					translate: [10, 10],
+					scale: [2, 2],
+					fractionDigits: 1
+				})
 				.export(exportSettings)
 				.then((result) => {
 					assert.is(result, 'm 22.2,22.2 L 28.2,28.2 l 31.4,31.4 z');
@@ -305,7 +313,11 @@ describe('Path', () => {
 			const path = 'm 1.123,1.123 C 2.123,4.123 4.123,4.123 4.123,2.123 c 10.23,20.45 20.45,20.45 20.45,10.23 z';
 
 			return new Path(path)
-				.transform(transformSettings)
+				.transform({
+					translate: { x: 10, y: 10 },
+					scale: { x: 2, y: 2 },
+					fractionDigits: 1
+				})
 				.export(exportSettings)
 				.then((result) => {
 					assert.is(result, 'm 22.2,22.2 C 24.2,28.2 28.2,28.2 28.2,24.2 c 40.5,60.9 60.9,60.9 60.9,40.5 z');
@@ -434,6 +446,70 @@ describe('Path', () => {
 				});
 		});
 
+		it('should scale when a number is provided', () => {
+			return new Path('M -500,-600 L7,8 z')
+				.export({ scale: 0.1 })
+				.then((path) => {
+					assert.is(path, 'M -50,-60 L 0.7,0.8 z');
+				});
+		});
+
+		it('should scale when an array is provided', () => {
+			return new Path('M -500,-600 L7,8 z')
+				.export({ scale: [0.1, 0.2] })
+				.then((path) => {
+					assert.is(path, 'M -50,-120 L 0.7,1.6 z');
+				});
+		});
+
+		it('should scale when an object is provided', () => {
+			return new Path('M -500,-600 L7,8 z')
+				.export({ scale: { x: 0.1, y: 0.2 } })
+				.then((path) => {
+					assert.is(path, 'M -50,-120 L 0.7,1.6 z');
+				});
+		});
+
+		it('should scale when a Point is provided', () => {
+			return new Path('M -500,-600 L7,8 z')
+				.export({ scale: new Point(0.1, 0.2) })
+				.then((path) => {
+					assert.is(path, 'M -50,-120 L 0.7,1.6 z');
+				});
+		});
+
+		it('should translate when a number is provided', () => {
+			return new Path('M -500,-600 L7,8 z')
+				.export({ translate: 10 })
+				.then((path) => {
+					assert.is(path, 'M -490,-590 L 17,18 z');
+				});
+		});
+
+		it('should translate when an array is provided', () => {
+			return new Path('M -500,-600 L7,8 z')
+				.export({ translate: [10, 20] })
+				.then((path) => {
+					assert.is(path, 'M -490,-580 L 17,28 z');
+				});
+		});
+
+		it('should translate when an object is provided', () => {
+			return new Path('M -500,-600 L7,8 z')
+				.export({ translate: { x: 10, y: 20 } })
+				.then((path) => {
+					assert.is(path, 'M -490,-580 L 17,28 z');
+				});
+		});
+
+		it('should translate when a Point is provided', () => {
+			return new Path('M -500,-600 L7,8 z')
+				.export({ translate: new Point(10, 20) })
+				.then((path) => {
+					assert.is(path, 'M -490,-580 L 17,28 z');
+				});
+		});
+
 		it('should remove whitespace around fractions when compress = true', () => {
 			return new Path('M -500,-600 L7,8.2 L0.5,0.78 z')
 				.export({
@@ -458,9 +534,7 @@ describe('Path', () => {
 
 		it('should export a polygon styled string if toPolygon is true', () => {
 			return new Path('50,50 100,100 200,150')
-				.export({
-					toPolygon: true
-				})
+				.export({ toPolygon: true })
 				.then((path) => {
 					assert.is(path, '50,50 100,100 200,150');
 				});
