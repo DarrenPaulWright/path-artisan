@@ -316,11 +316,11 @@ describe('Path', () => {
 				.transform({
 					translate: { x: 10, y: 10 },
 					scale: { x: 2, y: 2 },
-					fractionDigits: 1
+					fractionDigits: 0
 				})
 				.export(exportSettings)
 				.then((result) => {
-					assert.is(result, 'm 22.2,22.2 C 24.2,28.2 28.2,28.2 28.2,24.2 c 40.5,60.9 60.9,60.9 60.9,40.5 z');
+					assert.is(result, 'm 22,22 C 24,28 28,28 28,24 c 40,61 61,61 61,40 z');
 				});
 		});
 
@@ -472,9 +472,9 @@ describe('Path', () => {
 
 		it('should scale when a Point is provided', () => {
 			return new Path('M -500,-600 L7,8 z')
-				.export({ scale: new Point(0.1, 0.2) })
+				.export({ scale: new Point(0.1, 0.2), fractionDigits: 0 })
 				.then((path) => {
-					assert.is(path, 'M -50,-120 L 0.7,1.6 z');
+					assert.is(path, 'M -50,-120 L 1,2 z');
 				});
 		});
 
