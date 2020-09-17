@@ -176,7 +176,7 @@ describe('Path', () => {
 		});
 	});
 
-	describe('import', () => {
+	describe('.import', () => {
 		it('should import a polygon path', () => {
 			return new Path()
 				.import('50,50 100,100 200,150')
@@ -227,7 +227,20 @@ describe('Path', () => {
 		});
 	});
 
-	describe('eachPoint', () => {
+	describe('.update', () => {
+		it('should update a line', () => {
+			const path = new Path('m 0,0 L10,10 10,20 z');
+
+			path.update(1, '30,30');
+
+			return path.export()
+				.then((result) => {
+					assert.is(result, 'm 0,0 L 30,30 10,20 z');
+				});
+		});
+	});
+
+	describe('.eachPoint', () => {
 		it('should call a callback for every point in a path', () => {
 			let total = 0;
 			let count = 0;
@@ -273,7 +286,7 @@ describe('Path', () => {
 		});
 	});
 
-	describe('transform', () => {
+	describe('.transform', () => {
 		const transformSettings = {
 			translate: new Point(10, 10),
 			scale: new Point(2, 2),
@@ -355,7 +368,7 @@ describe('Path', () => {
 		});
 	});
 
-	describe('export', () => {
+	describe('.export', () => {
 		testValues
 			.forEach((data) => {
 				it(`should convert ${displayValue(data.input)} to absolute coordinates (${data.note})`, () => {

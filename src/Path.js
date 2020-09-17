@@ -344,7 +344,12 @@ export default class Path {
 		const command = this[PATH][index];
 
 		if (command !== undefined) {
-			command.set(values);
+			command.constructor.split([values])
+				.forEach((value, newIndex) => {
+					if (newIndex === 0) {
+						command.set(value);
+					}
+				});
 		}
 
 		return this;
