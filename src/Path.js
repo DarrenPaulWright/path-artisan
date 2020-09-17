@@ -466,12 +466,13 @@ export default class Path {
 				}
 
 				if (
-					settings.compress !== true &&
-					commandResult !== '' &&
-					output !== '' &&
-					!settings.isConsecutive &&
-					!settings.toPolygon &&
-					output.charAt(output.length - 1) !== ' '
+					(settings.compress !== true &&
+						commandResult !== '' &&
+						output !== '' &&
+						!settings.isConsecutive &&
+						!settings.toPolygon &&
+						output.charAt(output.length - 1) !== ' ') ||
+					(settings.toPolygon && settings.compress === true)
 				) {
 					output += ' ';
 				}
