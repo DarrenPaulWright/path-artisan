@@ -88,6 +88,13 @@ const testValues = [{
 	initial: 'm 5,6 V 7 z',
 	auto: 'M 5,6 V 7 Z'
 }, {
+	note: 'multiple consecutive shorthand lines',
+	input: 'M 10,10 L10,20 20,20 20,10 z',
+	absolute: 'M 10,10 V 20 H 20 V 10 Z',
+	relative: 'm 10,10 v 10 h 10 v -10 z',
+	initial: 'M 10,10 V 20 H 20 V 10 z',
+	auto: 'M 10,10 V 20 H 20 V 10 Z'
+}, {
 	note: '',
 	input: 'm 5,6 L10,12 l10,12 zm 5,6 L10,12 l10,12 z',
 	absolute: 'M 5,6 L 20,24 Z M 10,12 L 20,24 Z',
@@ -369,51 +376,51 @@ describe('Path', () => {
 	});
 
 	describe('.export', () => {
-		testValues
-			.forEach((data) => {
-				it(`should convert ${displayValue(data.input)} to absolute coordinates (${data.note})`, () => {
-					return new Path(data.input)
-						.export({
-							coordinates: 'absolute'
-						})
-						.then((path) => {
-							assert.is(path, data.absolute);
-						});
-				});
+		describe('coordinates', () => {
+			testValues
+				.forEach((data) => {
+					it(`should convert ${displayValue(data.input)} to absolute coordinates (${data.note})`, () => {
+						return new Path(data.input)
+							.export({
+								coordinates: 'absolute'
+							})
+							.then((path) => {
+								assert.is(path, data.absolute);
+							});
+					});
 
-				it(`should convert ${displayValue(data.input)} to absolute coordinates when async = true (${data.note})`, () => {
-					return new Path(data.input)
-						.export({
-							coordinates: 'absolute',
-							async: true
-						})
-						.then((path) => {
-							assert.is(path, data.absolute);
-						});
-				});
+					it(`should convert ${displayValue(data.input)} to absolute coordinates when async = true (${data.note})`, () => {
+						return new Path(data.input)
+							.export({
+								coordinates: 'absolute',
+								async: true
+							})
+							.then((path) => {
+								assert.is(path, data.absolute);
+							});
+					});
 
-				it(`should convert ${displayValue(data.input)} to relative coordinates (${data.note})`, () => {
-					return new Path(data.input)
-						.export({
-							coordinates: 'relative'
-						})
-						.then((path) => {
-							assert.is(path, data.relative);
-						});
-				});
+					it(`should convert ${displayValue(data.input)} to relative coordinates (${data.note})`, () => {
+						return new Path(data.input)
+							.export({
+								coordinates: 'relative'
+							})
+							.then((path) => {
+								assert.is(path, data.relative);
+							});
+					});
 
-				it(`should convert ${displayValue(data.input)} to relative coordinates, when async = true (${data.note})`, () => {
-					return new Path(data.input)
-						.export({
-							coordinates: 'relative',
-							async: true
-						})
-						.then((path) => {
-							assert.is(path, data.relative);
-						});
-				});
+					it(`should convert ${displayValue(data.input)} to relative coordinates, when async = true (${data.note})`, () => {
+						return new Path(data.input)
+							.export({
+								coordinates: 'relative',
+								async: true
+							})
+							.then((path) => {
+								assert.is(path, data.relative);
+							});
+					});
 
-				if (data.initial !== undefined) {
 					it(`should convert ${displayValue(data.input)} to its initial coordinates (${data.note})`, () => {
 						return new Path(data.input)
 							.export({
@@ -423,9 +430,7 @@ describe('Path', () => {
 								assert.is(path, data.initial);
 							});
 					});
-				}
 
-				if (data.auto !== undefined) {
 					it(`should convert ${displayValue(data.input)} to auto coordinates (${data.note})`, () => {
 						return new Path(data.input)
 							.export({
@@ -435,130 +440,140 @@ describe('Path', () => {
 								assert.is(path, data.auto);
 							});
 					});
-				}
+				});
+
+			it('should select the shortest strings when coordinates = auto', () => {
+				return new Path('M -500,-600 L7,8 l10,12 z')
+					.export({
+						coordinates: 'auto'
+					})
+					.then((path) => {
+						assert.is(path, 'M -500,-600 L 7,8 17,20 Z');
+					});
+			});
+		});
+
+		describe('scale', () => {
+			it('should scale when a number is provided', () => {
+				return new Path('M -500,-600 L7,8 z')
+					.export({ scale: 0.1 })
+					.then((path) => {
+						assert.is(path, 'M -50,-60 L 0.7,0.8 z');
+					});
 			});
 
-		it('should select the shortest strings when coordinates = auto', () => {
-			return new Path('M -500,-600 L7,8 l10,12 z')
-				.export({
-					coordinates: 'auto'
-				})
-				.then((path) => {
-					assert.is(path, 'M -500,-600 L 7,8 17,20 Z');
-				});
+			it('should scale when an array is provided', () => {
+				return new Path('M -500,-600 L7,8 z')
+					.export({ scale: [0.1, 0.2] })
+					.then((path) => {
+						assert.is(path, 'M -50,-120 L 0.7,1.6 z');
+					});
+			});
+
+			it('should scale when an object is provided', () => {
+				return new Path('M -500,-600 L7,8 z')
+					.export({ scale: { x: 0.1, y: 0.2 } })
+					.then((path) => {
+						assert.is(path, 'M -50,-120 L 0.7,1.6 z');
+					});
+			});
+
+			it('should scale when a Point is provided', () => {
+				return new Path('M -500,-600 L7,8 z')
+					.export({ scale: new Point(0.1, 0.2), fractionDigits: 0 })
+					.then((path) => {
+						assert.is(path, 'M -50,-120 L 1,2 z');
+					});
+			});
 		});
 
-		it('should remove whitespace when compress = true', () => {
-			return new Path('M -500,-600 L7,8 l10,12 z')
-				.export({
-					coordinates: 'auto',
-					compress: true
-				})
-				.then((path) => {
-					assert.is(path, 'M-500-600L7,8,17,20Z');
-				});
+		describe('translate', () => {
+			it('should translate when a number is provided', () => {
+				return new Path('M -500,-600 L7,8 z')
+					.export({ translate: 10 })
+					.then((path) => {
+						assert.is(path, 'M -490,-590 L 17,18 z');
+					});
+			});
+
+			it('should translate when an array is provided', () => {
+				return new Path('M -500,-600 L7,8 z')
+					.export({ translate: [10, 20] })
+					.then((path) => {
+						assert.is(path, 'M -490,-580 L 17,28 z');
+					});
+			});
+
+			it('should translate when an object is provided', () => {
+				return new Path('M -500,-600 L7,8 z')
+					.export({ translate: { x: 10, y: 20 } })
+					.then((path) => {
+						assert.is(path, 'M -490,-580 L 17,28 z');
+					});
+			});
+
+			it('should translate when a Point is provided', () => {
+				return new Path('M -500,-600 L7,8 z')
+					.export({ translate: new Point(10, 20) })
+					.then((path) => {
+						assert.is(path, 'M -490,-580 L 17,28 z');
+					});
+			});
 		});
 
-		it('should scale when a number is provided', () => {
-			return new Path('M -500,-600 L7,8 z')
-				.export({ scale: 0.1 })
-				.then((path) => {
-					assert.is(path, 'M -50,-60 L 0.7,0.8 z');
-				});
+		describe('compress', () => {
+			it('should remove whitespace when compress = true', () => {
+				return new Path('M -500,-600 L7,8 l10,12 z')
+					.export({
+						coordinates: 'auto',
+						compress: true
+					})
+					.then((path) => {
+						assert.is(path, 'M-500-600L7,8,17,20Z');
+					});
+			});
+
+			it('should remove whitespace around fractions when compress = true', () => {
+				return new Path('M -500,-600 L7,8.2 L0.5,0.78 z')
+					.export({
+						coordinates: 'auto',
+						compress: true
+					})
+					.then((path) => {
+						assert.is(path, 'M-500-600L7,8.2.5.78Z');
+					});
+			});
 		});
 
-		it('should scale when an array is provided', () => {
-			return new Path('M -500,-600 L7,8 z')
-				.export({ scale: [0.1, 0.2] })
-				.then((path) => {
-					assert.is(path, 'M -50,-120 L 0.7,1.6 z');
-				});
+		describe('commandsOnNewLines', () => {
+			it('should add newlines before each command', () => {
+				return new Path('m 5,6 L10,12 l10,12 zM -500,-600 L7,8 l10,12 z')
+					.export({
+						commandsOnNewLines: true,
+						combine: false
+					})
+					.then((path) => {
+						assert.is(path, 'm 5,6 \nL 10,12 \nl 10,12 \nz \nM -500,-600 \nL 7,8 \nl 10,12 \nz');
+					});
+			});
 		});
 
-		it('should scale when an object is provided', () => {
-			return new Path('M -500,-600 L7,8 z')
-				.export({ scale: { x: 0.1, y: 0.2 } })
-				.then((path) => {
-					assert.is(path, 'M -50,-120 L 0.7,1.6 z');
-				});
-		});
+		describe('toPolygon', () => {
+			it('should export a polygon styled string', () => {
+				return new Path('50,50 100,100 200,150')
+					.export({ toPolygon: true, compress: true })
+					.then((path) => {
+						assert.is(path, '50,50 100,100 200,150');
+					});
+			});
 
-		it('should scale when a Point is provided', () => {
-			return new Path('M -500,-600 L7,8 z')
-				.export({ scale: new Point(0.1, 0.2), fractionDigits: 0 })
-				.then((path) => {
-					assert.is(path, 'M -50,-120 L 1,2 z');
-				});
-		});
-
-		it('should translate when a number is provided', () => {
-			return new Path('M -500,-600 L7,8 z')
-				.export({ translate: 10 })
-				.then((path) => {
-					assert.is(path, 'M -490,-590 L 17,18 z');
-				});
-		});
-
-		it('should translate when an array is provided', () => {
-			return new Path('M -500,-600 L7,8 z')
-				.export({ translate: [10, 20] })
-				.then((path) => {
-					assert.is(path, 'M -490,-580 L 17,28 z');
-				});
-		});
-
-		it('should translate when an object is provided', () => {
-			return new Path('M -500,-600 L7,8 z')
-				.export({ translate: { x: 10, y: 20 } })
-				.then((path) => {
-					assert.is(path, 'M -490,-580 L 17,28 z');
-				});
-		});
-
-		it('should translate when a Point is provided', () => {
-			return new Path('M -500,-600 L7,8 z')
-				.export({ translate: new Point(10, 20) })
-				.then((path) => {
-					assert.is(path, 'M -490,-580 L 17,28 z');
-				});
-		});
-
-		it('should remove whitespace around fractions when compress = true', () => {
-			return new Path('M -500,-600 L7,8.2 L0.5,0.78 z')
-				.export({
-					coordinates: 'auto',
-					compress: true
-				})
-				.then((path) => {
-					assert.is(path, 'M-500-600L7,8.2.5.78Z');
-				});
-		});
-
-		it('should add newlines before each command when commandsOnNewLines = true', () => {
-			return new Path('m 5,6 L10,12 l10,12 zM -500,-600 L7,8 l10,12 z')
-				.export({
-					commandsOnNewLines: true,
-					combine: false
-				})
-				.then((path) => {
-					assert.is(path, 'm 5,6 \nL 10,12 \nl 10,12 \nz \nM -500,-600 \nL 7,8 \nl 10,12 \nz');
-				});
-		});
-
-		it('should export a polygon styled string if toPolygon is true', () => {
-			return new Path('50,50 100,100 200,150')
-				.export({ toPolygon: true, compress: true })
-				.then((path) => {
-					assert.is(path, '50,50 100,100 200,150');
-				});
-		});
-
-		it('should convert curves to a polygon if toPolygon is true', () => {
-			return new Path('m 2,2 C 2,4 4,4 4,2 Q 3,3 6,2 A 10,10 0 0 0 8,8')
-				.export({ toPolygon: true, compress: false })
-				.then((path) => {
-					assert.is(path, '2,2 4,2 6,2 8,8');
-				});
+			it('should convert curves to a polygon', () => {
+				return new Path('m 2,2 C 2,4 4,4 4,2 Q 3,3 6,2 A 10,10 0 0 0 8,8')
+					.export({ toPolygon: true, compress: false })
+					.then((path) => {
+						assert.is(path, '2,2 4,2 6,2 8,8');
+					});
+			});
 		});
 	});
 });

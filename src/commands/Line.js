@@ -44,12 +44,12 @@ export default class Line extends Command {
 			this.isExportedAbsolute = settings.toAbsolute;
 
 			if (settings.currentPoint.y === point.y) {
-				this.setExportShorthand(true, settings);
+				this.setExportShorthand('h', settings);
 				result = Line.label('H', 'h', settings) +
 					Line.numberToString(Line.transform(point, settings).x, settings);
 			}
 			else if (settings.currentPoint.x === point.x) {
-				this.setExportShorthand(true, settings);
+				this.setExportShorthand('v', settings);
 				result = Line.label('V', 'v', settings) +
 					Line.numberToString(Line.transform(point, settings).y, settings);
 			}
