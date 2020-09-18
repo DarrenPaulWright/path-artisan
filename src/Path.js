@@ -445,7 +445,8 @@ export default class Path {
 			toPolygon: false,
 			...settings,
 			currentPoint: origin,
-			subPathStart: 0
+			subPathStart: 0,
+			previousNumber: ''
 		};
 
 		processTransformSettings(settings);

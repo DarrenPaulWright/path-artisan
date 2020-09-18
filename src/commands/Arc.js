@@ -57,23 +57,29 @@ export default class Arc extends Command {
 		if (!settings.toPolygon) {
 			this.isExportedAbsolute = settings.toAbsolute;
 			this.setExportShorthand(false, settings);
+			const currentPoint = settings.currentPoint;
+			settings.currentPoint = origin;
 
 			result = Arc.label('A', 'a', settings) +
-				Arc.pointToString(radius, {
-					...settings,
-					currentPoint: origin
-				}) +
+				Arc.pointToString(radius, settings) +
 				Arc.numberToString(
 					round(this[DATA][1], settings.fractionDigits),
 					settings,
-					settings.compress
+					false,
+					true
 				) +
-				Arc.numberToString(this[DATA][2], settings, settings.compress) +
+				Arc.numberToString(this[DATA][2], settings, false, settings.compress) +
 				Arc.numberToString(this[DATA][3], settings);
+
+			settings.currentPoint = currentPoint;
 		}
+
+		const isConsecutive = settings.isConsecutive;
+		settings.isConsecutive = false;
 
 		result += Arc.pointToString(point, settings);
 
+		settings.isConsecutive = isConsecutive;
 		settings.currentPoint = point;
 
 		return result;

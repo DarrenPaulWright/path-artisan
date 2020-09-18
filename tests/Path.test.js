@@ -9,168 +9,224 @@ const testValues = [{
 	absolute: 'M 5,6',
 	relative: 'm 5,6',
 	initial: 'm 5,6',
-	auto: 'M 5,6'
+	auto: 'M 5,6',
+	compress: 'M5,6'
 }, {
 	note: 'remove new lines',
 	input: 'M\r 5,\n6',
 	absolute: 'M 5,6',
 	relative: 'm 5,6',
 	initial: 'M 5,6',
-	auto: 'M 5,6'
+	auto: 'M 5,6',
+	compress: 'M5,6'
 }, {
 	note: 'relative line',
 	input: 'm 5,6 l10,12',
 	absolute: 'M 5,6 L 15,18',
 	relative: 'm 5,6 l 10,12',
 	initial: 'm 5,6 l 10,12',
-	auto: 'M 5,6 L 15,18'
+	auto: 'M 5,6 L 15,18',
+	compress: 'M5,6L15,18'
 }, {
 	note: 'relative line with close',
 	input: 'm 5,6 l10,12 z',
 	absolute: 'M 5,6 L 15,18 Z',
 	relative: 'm 5,6 l 10,12 z',
 	initial: 'm 5,6 l 10,12 z',
-	auto: 'M 5,6 L 15,18 Z'
+	auto: 'M 5,6 L 15,18 Z',
+	compress: 'M5,6L15,18Z'
 }, {
 	note: 'relative line with absolute close',
 	input: 'm 5,6 l10,12 Z',
 	absolute: 'M 5,6 L 15,18 Z',
 	relative: 'm 5,6 l 10,12 z',
 	initial: 'm 5,6 l 10,12 Z',
-	auto: 'M 5,6 L 15,18 Z'
+	auto: 'M 5,6 L 15,18 Z',
+	compress: 'M5,6L15,18Z'
 }, {
 	note: 'two relative lines inline',
 	input: 'm 5,6 l10,12 l10,12 z',
 	absolute: 'M 5,6 L 25,30 Z',
 	relative: 'm 5,6 l 20,24 z',
 	initial: 'm 5,6 l 10,12 10,12 z',
-	auto: 'M 5,6 L 25,30 Z'
+	auto: 'M 5,6 L 25,30 Z',
+	compress: 'M5,6L25,30Z'
 }, {
 	note: 'relative line with consecutive commands',
 	input: 'm 5,6 l10,12 8,12 8,12 z',
 	absolute: 'M 5,6 L 15,18 31,42 Z',
 	relative: 'm 5,6 l 10,12 16,24 z',
 	initial: 'm 5,6 l 10,12 8,12 8,12 z',
-	auto: 'M 5,6 L 15,18 31,42 Z'
+	auto: 'M 5,6 L 15,18 31,42 Z',
+	compress: 'M5,6L15,18 31,42Z'
 }, {
 	note: 'an absolute and relative lines inline',
 	input: 'm 5,6 L10,12 l10,12 z',
 	absolute: 'M 5,6 L 20,24 Z',
 	relative: 'm 5,6 l 15,18 z',
 	initial: 'm 5,6 L 10,12 l 10,12 z',
-	auto: 'M 5,6 L 20,24 Z'
+	auto: 'M 5,6 L 20,24 Z',
+	compress: 'M5,6L20,24Z'
 }, {
 	note: 'relative horizontal',
 	input: 'm 5,6 h6 z',
 	absolute: 'M 5,6 H 11 Z',
 	relative: 'm 5,6 h 6 z',
 	initial: 'm 5,6 h 6 z',
-	auto: 'M 5,6 h 6 Z'
+	auto: 'M 5,6 h 6 Z',
+	compress: 'M5,6h6Z'
 }, {
 	note: 'absolute horizontal',
 	input: 'm 5,6 H6 z',
 	absolute: 'M 5,6 H 6 Z',
 	relative: 'm 5,6 h 1 z',
 	initial: 'm 5,6 H 6 z',
-	auto: 'M 5,6 H 6 Z'
+	auto: 'M 5,6 H 6 Z',
+	compress: 'M5,6H6Z'
 }, {
 	note: 'relative vertical',
 	input: 'm 5,6 v6 z',
 	absolute: 'M 5,6 V 12 Z',
 	relative: 'm 5,6 v 6 z',
 	initial: 'm 5,6 v 6 z',
-	auto: 'M 5,6 v 6 Z'
+	auto: 'M 5,6 v 6 Z',
+	compress: 'M5,6v6Z'
 }, {
 	note: 'absolute vertical',
 	input: 'm 5,6 V7 z',
 	absolute: 'M 5,6 V 7 Z',
 	relative: 'm 5,6 v 1 z',
 	initial: 'm 5,6 V 7 z',
-	auto: 'M 5,6 V 7 Z'
+	auto: 'M 5,6 V 7 Z',
+	compress: 'M5,6V7Z'
 }, {
 	note: 'multiple consecutive shorthand lines',
 	input: 'M 10,10 L10,20 20,20 20,10 z',
 	absolute: 'M 10,10 V 20 H 20 V 10 Z',
 	relative: 'm 10,10 v 10 h 10 v -10 z',
 	initial: 'M 10,10 V 20 H 20 V 10 z',
-	auto: 'M 10,10 V 20 H 20 V 10 Z'
+	auto: 'M 10,10 V 20 H 20 V 10 Z',
+	compress: 'M10,10V20H20V10Z'
 }, {
-	note: '',
+	note: 'whitespace',
+	input: 'M -500,-600 L7,8 l10,12 z',
+	absolute: 'M -500,-600 L 7,8 17,20 Z',
+	relative: 'm -500,-600 l 507,608 10,12 z',
+	initial: 'M -500,-600 L 7,8 l 10,12 z',
+	auto: 'M -500,-600 L 7,8 17,20 Z',
+	compress: 'M-500-600L7,8 17,20Z'
+}, {
+	note: 'fractions',
+	input: 'M -500,-600 L7,8.2 L0.5,0.78 z',
+	absolute: 'M -500,-600 L 7,8.2 0.5,0.78 Z',
+	relative: 'm -500,-600 l 507,608.2 -6.5,-7.42 z',
+	initial: 'M -500,-600 L 7,8.2 0.5,0.78 z',
+	auto: 'M -500,-600 L 7,8.2 0.5,0.78 Z',
+	compress: 'M-500-600L7,8.2.5.78Z'
+}, {
+	note: 'fractions 2',
+	input: 'M -500,-600 L7,8 L0.5,0.78 z',
+	absolute: 'M -500,-600 L 7,8 0.5,0.78 Z',
+	relative: 'm -500,-600 l 507,608 -6.5,-7.22 z',
+	initial: 'M -500,-600 L 7,8 0.5,0.78 z',
+	auto: 'M -500,-600 L 7,8 0.5,0.78 Z',
+	compress: 'M-500-600L7,8 .5.78Z'
+}, {
+	note: 'second move relative',
 	input: 'm 5,6 L10,12 l10,12 zm 5,6 L10,12 l10,12 z',
 	absolute: 'M 5,6 L 20,24 Z M 10,12 L 20,24 Z',
 	relative: 'm 5,6 l 15,18 z m 5,6 l 10,12 z',
 	initial: 'm 5,6 L 10,12 l 10,12 z m 5,6 l 10,12 z',
-	auto: 'M 5,6 L 20,24 Z m 5,6 L 20,24 Z'
+	auto: 'M 5,6 L 20,24 Z m 5,6 L 20,24 Z',
+	compress: 'M5,6L20,24Zm5,6L20,24Z'
 }, {
-	note: '',
+	note: 'second move absolute',
 	input: 'm 5,6 L10,12 l10,12 zM -500,-600 L7,8 l10,12 z',
 	absolute: 'M 5,6 L 20,24 Z M -500,-600 L 7,8 17,20 Z',
 	relative: 'm 5,6 l 15,18 z m -505,-606 l 507,608 10,12 z',
 	initial: 'm 5,6 L 10,12 l 10,12 z M -500,-600 L 7,8 l 10,12 z',
-	auto: 'M 5,6 L 20,24 Z M -500,-600 L 7,8 17,20 Z'
+	auto: 'M 5,6 L 20,24 Z M -500,-600 L 7,8 17,20 Z',
+	compress: 'M5,6L20,24ZM-500-600L7,8 17,20Z'
 }, {
 	note: 'Cubic consecutive',
 	input: 'm 2,2 C 2,4 4,4 4,2 4,6 6,6 6,4 z',
 	absolute: 'M 2,2 C 2,4 4,4 4,2 4,6 6,6 6,4 Z',
 	relative: 'm 2,2 c 0,2 2,2 2,0 0,4 2,4 2,2 z',
 	initial: 'm 2,2 C 2,4 4,4 4,2 4,6 6,6 6,4 z',
-	auto: 'M 2,2 C 2,4 4,4 4,2 4,6 6,6 6,4 Z'
+	auto: 'M 2,2 C 2,4 4,4 4,2 4,6 6,6 6,4 Z',
+	compress: 'M2,2C2,4 4,4 4,2 4,6 6,6 6,4Z'
 }, {
 	note: 'Cubic shorthand',
 	input: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 s 2,2 2,0 z',
 	absolute: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,4 8,2 Z',
 	relative: 'm 2,2 c 0,2 2,2 2,0 s 2,-2 2,0 2,2 2,0 z',
 	initial: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 s 2,2 2,0 z',
-	auto: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,4 8,2 Z'
+	auto: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,4 8,2 Z',
+	compress: 'M2,2C2,4 4,4 4,2S6,0 6,2 8,4 8,2Z'
 }, {
 	note: 'Cubic to consecutive shorthand',
 	input: 'm 2,2 C 2,4 4,4 4,2 4,0 6,0 6,2 6,4 8,0 8,2 z',
 	absolute: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
 	relative: 'm 2,2 c 0,2 2,2 2,0 s 2,-2 2,0 2,-2 2,0 z',
 	initial: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 z',
-	auto: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z'
+	auto: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
+	compress: 'M2,2C2,4 4,4 4,2S6,0 6,2 8,0 8,2Z'
 }, {
 	note: 'Cubic shorthand consecutive',
 	input: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
 	absolute: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
 	relative: 'm 2,2 c 0,2 2,2 2,0 s 2,-2 2,0 2,-2 2,0 z',
 	initial: 'm 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
-	auto: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z'
+	auto: 'M 2,2 C 2,4 4,4 4,2 S 6,0 6,2 8,0 8,2 Z',
+	compress: 'M2,2C2,4 4,4 4,2S6,0 6,2 8,0 8,2Z'
+}, {
+	note: 'Cubic with 0\'s',
+	input: 'M 370,320 C275,320 275,191 370,191',
+	absolute: 'M 370,320 C 275,320 275,191 370,191',
+	relative: 'm 370,320 c -95,0 -95,-129 0,-129',
+	initial: 'M 370,320 C 275,320 275,191 370,191',
+	auto: 'M 370,320 c -95,0 -95,-129 0,-129',
+	compress: 'M370,320c-95,0-95-129 0-129'
 }, {
 	note: 'Quadratic shorthand',
 	input: 'm 2,2 Q 3,3 4,2 T 6,2 t 2,0 z',
 	absolute: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',
 	relative: 'm 2,2 q 1,1 2,0 t 2,0 2,0 z',
 	initial: 'm 2,2 Q 3,3 4,2 T 6,2 t 2,0 z',
-	auto: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z'
+	auto: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',
+	compress: 'M2,2Q3,3 4,2T6,2 8,2Z'
 }, {
 	note: 'Quadratic to consecutive shorthand',
 	input: 'm 2,2 Q 3,3 4,2 5,1 6,2 7,3 8,2 z',
 	absolute: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',
 	relative: 'm 2,2 q 1,1 2,0 t 2,0 2,0 z',
 	initial: 'm 2,2 Q 3,3 4,2 T 6,2 8,2 z',
-	auto: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z'
+	auto: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',
+	compress: 'M2,2Q3,3 4,2T6,2 8,2Z'
 }, {
 	note: 'Quadratic shorthand consecutive',
 	input: 'm 2,2 Q 3,3 4,2 T 6,2 8,2 z',
 	absolute: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',
 	relative: 'm 2,2 q 1,1 2,0 t 2,0 2,0 z',
 	initial: 'm 2,2 Q 3,3 4,2 T 6,2 8,2 z',
-	auto: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z'
+	auto: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',
+	compress: 'M2,2Q3,3 4,2T6,2 8,2Z'
 }, {
 	note: 'Arc',
 	input: 'm 2,2 A 10,10 0 0 0 8,8 a 5,5 0 0 0 12,12 z',
 	absolute: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 20,20 Z',
 	relative: 'm 2,2 a 10,10 0 0 0 6,6 5,5 0 0 0 12,12 z',
 	initial: 'm 2,2 A 10,10 0 0 0 8,8 a 5,5 0 0 0 12,12 z',
-	auto: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 20,20 Z'
+	auto: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 20,20 Z',
+	compress: 'M2,2A10,10 0 008,8 5,5 0 0020,20Z'
 }, {
 	note: 'Arc consecutive',
 	input: 'm 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 17,17 z',
 	absolute: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 17,17 Z',
 	relative: 'm 2,2 a 10,10 0 0 0 6,6 5,5 0 0 0 9,9 z',
 	initial: 'm 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 17,17 z',
-	auto: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 17,17 Z'
+	auto: 'M 2,2 A 10,10 0 0 0 8,8 5,5 0 0 0 17,17 Z',
+	compress: 'M2,2A10,10 0 008,8a5,5 0 009,9Z'
 }];
 
 describe('Path', () => {
@@ -441,16 +497,6 @@ describe('Path', () => {
 							});
 					});
 				});
-
-			it('should select the shortest strings when coordinates = auto', () => {
-				return new Path('M -500,-600 L7,8 l10,12 z')
-					.export({
-						coordinates: 'auto'
-					})
-					.then((path) => {
-						assert.is(path, 'M -500,-600 L 7,8 17,20 Z');
-					});
-			});
 		});
 
 		describe('scale', () => {
@@ -522,27 +568,21 @@ describe('Path', () => {
 		});
 
 		describe('compress', () => {
-			it('should remove whitespace when compress = true', () => {
-				return new Path('M -500,-600 L7,8 l10,12 z')
-					.export({
-						coordinates: 'auto',
-						compress: true
-					})
-					.then((path) => {
-						assert.is(path, 'M-500-600L7,8,17,20Z');
-					});
-			});
-
-			it('should remove whitespace around fractions when compress = true', () => {
-				return new Path('M -500,-600 L7,8.2 L0.5,0.78 z')
-					.export({
-						coordinates: 'auto',
-						compress: true
-					})
-					.then((path) => {
-						assert.is(path, 'M-500-600L7,8.2.5.78Z');
-					});
-			});
+			testValues
+				.forEach((data) => {
+					if (data.compress) {
+						it(`should compress ${displayValue(data.input)} to auto coordinates (${data.note})`, () => {
+							return new Path(data.input)
+								.export({
+									coordinates: 'auto',
+									compress: true
+								})
+								.then((path) => {
+									assert.is(path, data.compress);
+								});
+						});
+					}
+				});
 		});
 
 		describe('commandsOnNewLines', () => {

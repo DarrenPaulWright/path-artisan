@@ -13,8 +13,8 @@ describe('optimizeSvgPaths', () => {
 		const output = `<svg width="100" height="100">
 	<polyline points="5,6 7.2.8 9,10"/>
 	<polygon points="3,4 5.3,6 7,8"/>
-	<path d="m0,0L1,1,2,3z"/>
-	<path d="m0,0L7,1,2,3z"/>
+	<path d="m0,0L1,1 2,3z"/>
+	<path d="m0,0L7,1 2,3z"/>
 </svg>`;
 
 		return optimizeSvgPaths(input, { compress: true, scale: 0.1 })

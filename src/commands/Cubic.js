@@ -79,11 +79,11 @@ export default class Cubic extends Command {
 				this.setExportShorthand(false, settings);
 				result = Cubic.label('C', 'c', settings) +
 					Cubic.pointToString(control1, settings) +
-					Cubic.pointToString(control2, settings);
+					Cubic.pointToString(control2, settings, true);
 			}
 		}
 
-		result += Cubic.pointToString(point, settings);
+		result += Cubic.pointToString(point, settings, true);
 
 		settings.currentPoint = point;
 

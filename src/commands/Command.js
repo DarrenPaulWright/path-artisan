@@ -162,26 +162,27 @@ export default class Command {
 		return point;
 	}
 
-	static pointToString(point, settings) {
-		const compress = settings.compress && settings.isConsecutive && !settings.toPolygon;
+	static pointToString(point, settings, followsPoint = false) {
+		followsPoint = !settings.toPolygon && (settings.isConsecutive === true || followsPoint);
 
 		point = Command.transform(point, settings);
 
-		return Command.numberToString(point.x, settings, compress) +
-			Command.numberToString(point.y, settings, true);
+		return Command.numberToString(point.x, settings, false, followsPoint) + Command.numberToString(point.y, settings, true);
 	}
 
-	static numberToString(number, settings, isY = false) {
-		const isFraction = number > 0 && number < 1;
-		const isNegative = number < 0;
+	static numberToString(number, settings, isY = false, followsPoint = false) {
 		let output = '';
+		const needsWhitespace = number >= 1 || number === 0 ||
+			(number > 0 && number < 1 &&
+				(settings.previousNumber === undefined ||
+					!settings.previousNumber.includes('.')));
 
 		if (isY) {
-			if (settings.compress !== true || !(isNegative || isFraction)) {
+			if (settings.compress !== true || needsWhitespace) {
 				output += ',';
 			}
 		}
-		else if (settings.compress !== true) {
+		else if (settings.compress !== true || (followsPoint && needsWhitespace)) {
 			output += ' ';
 		}
 
@@ -194,6 +195,8 @@ export default class Command {
 		else {
 			output += number;
 		}
+
+		settings.previousNumber = output;
 
 		return output;
 	}

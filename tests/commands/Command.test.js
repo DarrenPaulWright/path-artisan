@@ -162,7 +162,7 @@ describe('Command', () => {
 			assert.equal(point, output);
 		});
 
-		it('should add a comma at the beginning if followsPoint=true and compress=true', () => {
+		it('should add a space at the beginning if followsPoint=true and compress=true', () => {
 			const point = new Point(10, -10);
 			const output = point.clone();
 
@@ -173,7 +173,7 @@ describe('Command', () => {
 				compress: true,
 				isConsecutive: true,
 				currentPoint
-			}), ',30-60');
+			}), ' 30-60');
 			assert.equal(point, output);
 		});
 
@@ -212,13 +212,55 @@ describe('Command', () => {
 			yCompressTrue: ',0',
 			yCompressFalse: ',0'
 		}, {
+			number: 0,
+			previousNumber: '2',
+			compressTrue: '0',
+			compressFalse: ' 0',
+			yCompressTrue: ',0',
+			yCompressFalse: ',0'
+		}, {
+			number: 0,
+			previousNumber: '2.3',
+			compressTrue: '0',
+			compressFalse: ' 0',
+			yCompressTrue: ',0',
+			yCompressFalse: ',0'
+		}, {
 			number: -1,
 			compressTrue: '-1',
 			compressFalse: ' -1',
 			yCompressTrue: '-1',
 			yCompressFalse: ',-1'
 		}, {
+			number: -1,
+			previousNumber: '2',
+			compressTrue: '-1',
+			compressFalse: ' -1',
+			yCompressTrue: '-1',
+			yCompressFalse: ',-1'
+		}, {
+			number: -1,
+			previousNumber: '2.3',
+			compressTrue: '-1',
+			compressFalse: ' -1',
+			yCompressTrue: '-1',
+			yCompressFalse: ',-1'
+		}, {
 			number: 1,
+			compressTrue: '1',
+			compressFalse: ' 1',
+			yCompressTrue: ',1',
+			yCompressFalse: ',1'
+		}, {
+			number: 1,
+			previousNumber: '2',
+			compressTrue: '1',
+			compressFalse: ' 1',
+			yCompressTrue: ',1',
+			yCompressFalse: ',1'
+		}, {
+			number: 1,
+			previousNumber: '2.3',
 			compressTrue: '1',
 			compressFalse: ' 1',
 			yCompressTrue: ',1',
@@ -231,6 +273,14 @@ describe('Command', () => {
 			yCompressFalse: ',20.23'
 		}, {
 			number: 0.23,
+			previousNumber: '2',
+			compressTrue: '.23',
+			compressFalse: ' 0.23',
+			yCompressTrue: ',.23',
+			yCompressFalse: ',0.23'
+		}, {
+			number: 0.23,
+			previousNumber: '2.3',
 			compressTrue: '.23',
 			compressFalse: ' 0.23',
 			yCompressTrue: '.23',
@@ -238,24 +288,36 @@ describe('Command', () => {
 		}];
 
 		values.forEach((data) => {
-			describe(`when given ${displayValue(data.number)}`, () => {
+			describe(`when given ${displayValue(data.number)} and previousNumber=${displayValue(data.previousNumber)}`, () => {
 				it(`should return ${displayValue(data.compressTrue)} when compress=true`, () => {
-					const result = Command.numberToString(data.number, { compress: true });
+					const result = Command.numberToString(data.number, {
+						compress: true,
+						previousNumber: data.previousNumber
+					});
 					assert.equal(result, data.compressTrue);
 				});
 
 				it(`should return ${displayValue(data.compressFalse)} when compress=false`, () => {
-					const result = Command.numberToString(data.number, { compress: false });
+					const result = Command.numberToString(data.number, {
+						compress: false,
+						previousNumber: data.previousNumber
+					});
 					assert.equal(result, data.compressFalse);
 				});
 
 				it(`should return ${displayValue(data.yCompressTrue)} when compress=true and isY=true`, () => {
-					const result = Command.numberToString(data.number, { compress: true }, true);
+					const result = Command.numberToString(data.number, {
+						compress: true,
+						previousNumber: data.previousNumber
+					}, true);
 					assert.equal(result, data.yCompressTrue);
 				});
 
 				it(`should return ${displayValue(data.yCompressFalse)} when compress=false and isY=true`, () => {
-					const result = Command.numberToString(data.number, { compress: false }, true);
+					const result = Command.numberToString(data.number, {
+						compress: false,
+						previousNumber: data.previousNumber
+					}, true);
 					assert.equal(result, data.yCompressFalse);
 				});
 			});
