@@ -10,7 +10,12 @@ describe('Command', () => {
 		});
 
 		it('should parse mulitple points', () => {
-			assert.equal(Command.clean('1,2 3,4 5,9'), ['1', '2', '3', '4', '5', '9']);
+			assert.equal(Command.clean('1,2 3,4 5,9'), ['1',
+				'2',
+				'3',
+				'4',
+				'5',
+				'9']);
 		});
 
 		it('should parse a single point with a negative value', () => {
@@ -22,19 +27,39 @@ describe('Command', () => {
 		});
 
 		it('should parse mulitple points with negative values', () => {
-			assert.equal(Command.clean('1,2-3,-4 5-9'), ['1', '2', '-3', '-4', '5', '-9']);
+			assert.equal(Command.clean('1,2-3,-4 5-9'), ['1',
+				'2',
+				'-3',
+				'-4',
+				'5',
+				'-9']);
 		});
 
 		it('should handle extra whitespace between points', () => {
-			assert.equal(Command.clean('1,2-3-4   5-9'), ['1', '2', '-3', '-4', '5', '-9']);
+			assert.equal(Command.clean('1,2-3-4   5-9'), ['1',
+				'2',
+				'-3',
+				'-4',
+				'5',
+				'-9']);
 		});
 
 		it('should handle single extra whitespace at the ends', () => {
-			assert.equal(Command.clean(' 1,2-3-4   5-9 '), ['1', '2', '-3', '-4', '5', '-9']);
+			assert.equal(Command.clean(' 1,2-3-4   5-9 '), ['1',
+				'2',
+				'-3',
+				'-4',
+				'5',
+				'-9']);
 		});
 
 		it('should handle multiple extra whitespace at the ends', () => {
-			assert.equal(Command.clean('  1,2-3-4   5-9  '), ['1', '2', '-3', '-4', '5', '-9']);
+			assert.equal(Command.clean('  1,2-3-4   5-9  '), ['1',
+				'2',
+				'-3',
+				'-4',
+				'5',
+				'-9']);
 		});
 
 		it('should handle numbers with multiple digits', () => {
@@ -51,7 +76,16 @@ describe('Command', () => {
 		});
 
 		it('should handle compressed fraction digits', () => {
-			assert.equal(Command.clean('123.456.6-13'), ['123.456', '.6', '-13']);
+			assert.equal(Command.clean('123.456.6-13'), ['123.456',
+				'.6',
+				'-13']);
+		});
+
+		it('should handle multiple compressed fraction digits', () => {
+			assert.equal(Command.clean('.123.456.6-13'), ['.123',
+				'.456',
+				'.6',
+				'-13']);
 		});
 
 		it('should ignore returns', () => {
@@ -85,7 +119,10 @@ describe('Command', () => {
 		});
 
 		it('should not add a space at the end if compress = true', () => {
-			assert.is(Command.label('Z', 'z', { compress: true, toAbsolute: true }), 'Z');
+			assert.is(Command.label('Z', 'z', {
+				compress: true,
+				toAbsolute: true
+			}), 'Z');
 		});
 
 		it('should add a newline if commandsOnNewLines = true', () => {
@@ -93,7 +130,10 @@ describe('Command', () => {
 		});
 
 		it('should do both', () => {
-			assert.is(Command.label('Z', 'z', { compress: true, commandsOnNewLines: true }), '\nz');
+			assert.is(Command.label('Z', 'z', {
+				compress: true,
+				commandsOnNewLines: true
+			}), '\nz');
 		});
 	});
 
@@ -109,7 +149,10 @@ describe('Command', () => {
 		});
 
 		it('should remove the comma when y is negative and compress=true', () => {
-			assert.equal(Command.pointToString(new Point(1, -2), { compress: true, currentPoint }), '1-2');
+			assert.equal(Command.pointToString(new Point(1, -2), {
+				compress: true,
+				currentPoint
+			}), '1-2');
 		});
 
 		it('should not round if fractionDigits is not set', () => {
@@ -120,7 +163,10 @@ describe('Command', () => {
 			const point = new Point(1.123, -2.456);
 			const output = point.clone();
 
-			assert.equal(Command.pointToString(point, { fractionDigits: 2, currentPoint }), ' 1.12,-2.46');
+			assert.equal(Command.pointToString(point, {
+				fractionDigits: 2,
+				currentPoint
+			}), ' 1.12,-2.46');
 			assert.equal(point, output);
 		});
 

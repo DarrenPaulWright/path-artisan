@@ -188,6 +188,14 @@ const testValues = [{
 	auto: 'M 370,320 c -95,0 -95,-129 0,-129',
 	compress: 'M370,320c-95,0-95-129 0-129'
 }, {
+	note: 'Cubic with fractions',
+	input: 'c.646.045 1.266.2 1.897.34',
+	absolute: 'C 0.646,0.045 1.266,0.2 1.897,0.34',
+	relative: 'c 0.646,0.045 1.266,0.2 1.897,0.34',
+	initial: 'c 0.646,0.045 1.266,0.2 1.897,0.34',
+	auto: 'C 0.646,0.045 1.266,0.2 1.897,0.34',
+	compress: 'C.646.045 1.266.2 1.897.34'
+}, {
 	note: 'Quadratic shorthand',
 	input: 'm 2,2 Q 3,3 4,2 T 6,2 t 2,0 z',
 	absolute: 'M 2,2 Q 3,3 4,2 T 6,2 8,2 Z',

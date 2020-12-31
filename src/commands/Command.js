@@ -59,6 +59,7 @@ export default class Command {
 			if (!isWhiteSpace(string[i]) || string[i] === '-') {
 				const position = output.length % length;
 
+				hasDecimal = string[i] === '.';
 				start = i++;
 				if (!singleValues || !singleValues.includes(position)) {
 					while (!isWhiteSpace(string[i]) && (!hasDecimal || string[i] !== '.')) {
