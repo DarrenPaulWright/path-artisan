@@ -248,6 +248,18 @@ describe('Command', () => {
 			}), '-46-40');
 			assert.equal(point, output);
 		});
+
+		it('should remove initial zero from negative fractions when compress is true', () => {
+			const point = new Point(-0.233, -0.467);
+			const output = point.clone();
+
+			assert.equal(Command.pointToString(point, {
+				fractionDigits: 2,
+				compress: true,
+				currentPoint
+			}), '-.23-.47');
+			assert.equal(point, output);
+		});
 	});
 
 	describe('.numberToString', () => {

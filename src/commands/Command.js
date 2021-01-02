@@ -173,8 +173,10 @@ export default class Command {
 
 	static numberToString(number, settings, isY = false, followsPoint = false) {
 		let output = '';
-		const needsWhitespace = number >= 1 || number === 0 ||
-			(number > 0 && number < 1 &&
+		const needsWhitespace = number >= 1 ||
+			number === 0 ||
+			(number > 0 &&
+				number < 1 &&
 				(settings.previousNumber === undefined ||
 					!settings.previousNumber.includes('.')));
 
@@ -190,8 +192,11 @@ export default class Command {
 		if (number === 0) {
 			output += '0';
 		}
-		else if (settings.compress === true) {
+		else if (settings.compress === true && number > 0 && number < 1) {
 			output += (number + '').replace(/^0+/u, '');
+		}
+		else if (settings.compress === true && number < 0 && number > -1) {
+			output += (number + '').replace(/^-0+/u, '-');
 		}
 		else {
 			output += number;
