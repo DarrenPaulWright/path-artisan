@@ -18,8 +18,8 @@ export default class Command {
 		if (isArray(args)) {
 			const output = [];
 
-			for (let i = size; i <= args.length; i += size) {
-				output.push(args.slice(i - size, i));
+			for (let index = size; index <= args.length; index += size) {
+				output.push(args.slice(index - size, index));
 			}
 
 			return output;
@@ -52,26 +52,26 @@ export default class Command {
 	static clean(string, singleValues, length = 1) {
 		const output = [];
 		let start = 0;
-		let i = 0;
+		let index = 0;
 		let hasDecimal = false;
 
-		while (i < string.length) {
-			if (!isWhiteSpace(string[i]) || string[i] === '-') {
+		while (index < string.length) {
+			if (!isWhiteSpace(string[index]) || string[index] === '-') {
 				const position = output.length % length;
 
-				hasDecimal = string[i] === '.';
-				start = i++;
+				hasDecimal = string[index] === '.';
+				start = index++;
 				if (!singleValues || !singleValues.includes(position)) {
-					while (!isWhiteSpace(string[i]) && (!hasDecimal || string[i] !== '.')) {
-						hasDecimal = hasDecimal || string[i] === '.';
-						i++;
+					while (!isWhiteSpace(string[index]) && (!hasDecimal || string[index] !== '.')) {
+						hasDecimal = hasDecimal || string[index] === '.';
+						index++;
 					}
 				}
 				hasDecimal = false;
-				output.push(string.slice(start, i));
+				output.push(string.slice(start, index));
 			}
 			else {
-				i++;
+				index++;
 			}
 		}
 

@@ -17,6 +17,6 @@ suite('Command', () => {
 	}, benchSettings);
 
 	benchmark('three points dirty', () => {
-		temporaryTarget = Command.clean(' 123.456\t,0.6\r-3 ,-123.456\n 5-0.6   '); // eslint-disable-line no-unused-vars
+		temporaryTarget = Command.clean(' 123.456\t,0.6\r-3 ,-123.456\n 5-0.6   ');
 	}, benchSettings);
 });

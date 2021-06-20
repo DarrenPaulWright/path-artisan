@@ -5,10 +5,10 @@ module.exports = function(api) {
 		]
 	];
 	const plugins = [
-		['istanbul', { 'exclude': ['tests/**/*.js'] }]
+		['istanbul', {'exclude': ['tests/**/*.js']}]
 	];
 
-	api.cache(false);
+	api.cache(true);
 
 	return {
 		presets,

@@ -19,13 +19,13 @@ export default class Arc extends Command {
 
 		args = Arc.clean(args[0], [3, 4], 7);
 
-		for (let i = size; i <= args.length; i += size) {
+		for (let index = size; index <= args.length; index += size) {
 			output.push([
-				new Point(args[i - 7], args[i - 6]),
-				parseFloat(args[i - 5]),
-				parseInt(args[i - 4], 10),
-				parseInt(args[i - 3], 10),
-				new Point(args[i - 2], args[i - 1])
+				new Point(args[index - 7], args[index - 6]),
+				parseFloat(args[index - 5]),
+				parseInt(args[index - 4], 10),
+				parseInt(args[index - 3], 10),
+				new Point(args[index - 2], args[index - 1])
 			]);
 		}
 
